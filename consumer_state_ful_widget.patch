@@ -1,0 +1,19 @@
+Index: lib/products/presentation/product_screen.dart
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/lib/products/presentation/product_screen.dart b/lib/products/presentation/product_screen.dart
+--- a/lib/products/presentation/product_screen.dart	
++++ b/lib/products/presentation/product_screen.dart	(date 1753336764227)
+@@ -29,7 +29,9 @@
+       body: productState.when(
+           data: (data) => NotificationListener<ScrollNotification>(
+             onNotification: (scrollInfo) {
+-              if (scrollInfo.metrics.pixels == scrollInfo.metrics.maxScrollExtent && notifier.hasMore) {
++              bool nextPage = scrollInfo.metrics.pixels == scrollInfo.metrics.maxScrollExtent && notifier.hasMore;
++              print('ProductList: next page: $nextPage');
++              if (nextPage) {
+                 notifier.fetchNextPage();
+               }
+               return false;

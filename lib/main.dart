@@ -5,19 +5,15 @@ import 'package:ticl_ecommerce/filter/filter_screen.dart';
 import 'package:ticl_ecommerce/products/presentation/product_screen.dart';
 
 void main() {
-  runApp(
-    ProviderScope(child: MyApp())
-  );
+  runApp( ProviderScope(child: MyApp()) );
 }
 
 final ValueNotifier<int> selectedIndex = ValueNotifier(0);
 
 class MyApp extends StatelessWidget {
-  final List<Widget> pages = [
-    ProductListScreen(),
-    FilterScreen(),
-    CartScreen(),
-  ];
+  MyApp({super.key});
+
+  final List<Widget> pages = [ProductListScreen(), FilterScreen(), CartScreen(),];
 
   @override
   Widget build(BuildContext context) {

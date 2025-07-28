@@ -44,24 +44,25 @@ class ProductListNotifier
 
   bool get isLoading => _isLoading;
 
-  searchProducts(String value) {
+  // search product from the list.
+  void searchProducts(String value) {
     if (value.isEmpty) {
       state = AsyncValue.data(_productData);
     } else {
-      state = AsyncValue.data(
-        _productData.where((product) {
-          return product['title'].toString().startsWith(value);
-        }).toList(),
-      );
+      List<Map<String, dynamic>> productList = _productData.where((product) {
+        return product['title'].toString().toLowerCase().startsWith(value.toLowerCase());
+      }).toList();
+      if (productList.isEmpty) {
+        state = AsyncValue.error('No product found', StackTrace.current);
+      } else {
+        state = AsyncValue.data(productList);
+      }
     }
   }
 }
 
 final productListNotifierProvider =
-    StateNotifierProvider<
-      ProductListNotifier,
-      AsyncValue<List<Map<String, dynamic>>>
-    >((ref) {
+    StateNotifierProvider<ProductListNotifier, AsyncValue<List<Map<String, dynamic>>>>((ref) {
       final repository = ref.read(productRepositoryProvider);
       return ProductListNotifier(repository);
     });

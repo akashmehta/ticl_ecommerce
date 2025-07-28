@@ -7,8 +7,9 @@ final productRepositoryProvider = Provider<ProductRepository>((ref) {
   return ProductRepository(service);
 });
 
-class ProductListNotifier extends StateNotifier<AsyncValue<List<Map<String, dynamic>>>> {
-  ProductListNotifier(this._repository): super (const AsyncValue.loading()) {
+class ProductListNotifier
+    extends StateNotifier<AsyncValue<List<Map<String, dynamic>>>> {
+  ProductListNotifier(this._repository) : super(const AsyncValue.loading()) {
     fetchNextPage();
   }
 
@@ -25,7 +26,10 @@ class ProductListNotifier extends StateNotifier<AsyncValue<List<Map<String, dyna
     if (!_hasMore || _isLoading) return;
     try {
       _isLoading = true;
-      final newData = await _repository.getProductList(page: _currentPage, limit: _limit);
+      final newData = await _repository.getProductList(
+        page: _currentPage,
+        limit: _limit,
+      );
       if (newData.length < _limit) _hasMore = false;
       _productData.addAll(newData);
       _currentPage++;
@@ -35,11 +39,29 @@ class ProductListNotifier extends StateNotifier<AsyncValue<List<Map<String, dyna
       state = AsyncValue.error(e, st);
     }
   }
+
   bool get hasMore => _hasMore;
+
   bool get isLoading => _isLoading;
+
+  searchProducts(String value) {
+    if (value.isEmpty) {
+      state = AsyncValue.data(_productData);
+    } else {
+      state = AsyncValue.data(
+        _productData.where((product) {
+          return product['title'].toString().startsWith(value);
+        }).toList(),
+      );
+    }
+  }
 }
 
-final productListNotifierProvider = StateNotifierProvider<ProductListNotifier, AsyncValue<List<Map<String, dynamic>>>>((ref) {
-  final repository = ref.read(productRepositoryProvider);
-  return ProductListNotifier(repository);
-});
+final productListNotifierProvider =
+    StateNotifierProvider<
+      ProductListNotifier,
+      AsyncValue<List<Map<String, dynamic>>>
+    >((ref) {
+      final repository = ref.read(productRepositoryProvider);
+      return ProductListNotifier(repository);
+    });

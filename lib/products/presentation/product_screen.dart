@@ -12,7 +12,18 @@ class ProductListScreen extends ConsumerWidget {
     final productState = ref.watch(productListNotifierProvider);
 
     return Scaffold(
-      appBar: AppBar(title: Text("Product List")),
+      appBar: AppBar(
+        title: TextField(
+          onChanged: (value) {
+            notifier.searchProducts(value);
+          },
+          decoration: InputDecoration(
+            hintText: 'Search...',
+            prefixIcon: Icon(Icons.search),
+            border: InputBorder.none,
+          ),
+        ),
+      ),
       body: productState.when(
         data: (data) => NotificationListener<ScrollNotification>(
           onNotification: (scrollInfo) {
@@ -20,7 +31,6 @@ class ProductListScreen extends ConsumerWidget {
                     scrollInfo.metrics.maxScrollExtent &&
                 notifier.hasMore &&
                 !notifier.isLoading) {
-              print('ProductList data : ${data.length}');
               notifier.fetchNextPage();
             }
             return false;

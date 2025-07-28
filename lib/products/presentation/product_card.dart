@@ -68,7 +68,7 @@ class ProductCard extends StatelessWidget {
             flex: 5,
             child: Text(
               textAlign: TextAlign.start,
-              'Rs. ${product['price'] ?? 'NA'}',
+              '\u{20B9}${product['price'] ?? 'NA'}',
               style: const TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
               maxLines: 1,
               overflow: TextOverflow.ellipsis,

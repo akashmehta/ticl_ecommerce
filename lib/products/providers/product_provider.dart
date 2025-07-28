@@ -9,7 +9,6 @@ final productRepositoryProvider = Provider<ProductRepository>((ref) {
 
 class ProductListNotifier extends StateNotifier<AsyncValue<List<Map<String, dynamic>>>> {
   ProductListNotifier(this._repository): super (const AsyncValue.loading()) {
-    print('ProductList constructor called');
     fetchNextPage();
   }
 
@@ -18,24 +17,26 @@ class ProductListNotifier extends StateNotifier<AsyncValue<List<Map<String, dyna
   int _currentPage = 0;
   final int _limit = 10;
   bool _hasMore = true;
+  bool _isLoading = false;
 
-  final List<Map<String, dynamic>> _weatherData = [];
+  final List<Map<String, dynamic>> _productData = [];
 
   Future<void> fetchNextPage() async {
-    if (!_hasMore) return;
+    if (!_hasMore || _isLoading) return;
     try {
-      print('ProductList: page: $_currentPage limit : $_limit');
+      _isLoading = true;
       final newData = await _repository.getProductList(page: _currentPage, limit: _limit);
       if (newData.length < _limit) _hasMore = false;
-
-      _weatherData.addAll(newData);
+      _productData.addAll(newData);
       _currentPage++;
-      state = AsyncValue.data(_weatherData);
+      _isLoading = false;
+      state = AsyncValue.data(_productData);
     } catch (e, st) {
       state = AsyncValue.error(e, st);
     }
   }
   bool get hasMore => _hasMore;
+  bool get isLoading => _isLoading;
 }
 
 final productListNotifierProvider = StateNotifierProvider<ProductListNotifier, AsyncValue<List<Map<String, dynamic>>>>((ref) {

@@ -1,5 +1,7 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+import 'package:flutter/services.dart';
+
 class ProductService {
   final String BASE_URL = 'https://dummyjson.com';
 
@@ -17,4 +19,12 @@ class ProductService {
       throw e;
     }
   }
+
+
+  Future<List<Map<String, dynamic>>> loadJsonData() async {
+    final String response = await rootBundle.loadString('assets/products.json');
+    final data = await json.decode(response);
+    return List<Map<String, dynamic>>.from(data['products']);
+  }
+
 }

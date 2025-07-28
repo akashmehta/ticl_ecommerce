@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../providers/product_provider.dart';
+import '../presentation/product_card.dart';
 
 class ProductListScreen extends ConsumerWidget {
   const ProductListScreen({super.key});
@@ -10,23 +11,21 @@ class ProductListScreen extends ConsumerWidget {
     final notifier = ref.watch(productListNotifierProvider.notifier);
     final productState = ref.watch(productListNotifierProvider);
 
-    // notifier.fetchNextPage();
     return Scaffold(
       appBar: AppBar(title: Text("Product List"),),
       body: productState.when(
-          data: (data) => NotificationListener<ScrollNotification>(
+        data: (data) => NotificationListener<ScrollNotification>(
             onNotification: (scrollInfo) {
-              if (scrollInfo.metrics.pixels == scrollInfo.metrics.maxScrollExtent && notifier.hasMore) {
+              if (scrollInfo.metrics.pixels == scrollInfo.metrics.maxScrollExtent &&
+                  notifier.hasMore && !notifier.isLoading) {
+                print('ProductList data : ${data.length}');
                 notifier.fetchNextPage();
               }
               return false;
             },
             child: ListView.builder(
               itemCount: data.length,
-              itemBuilder: (context, index) => ListTile(
-                title: Text(data[index]['title'] ?? "Unknown"),
-                subtitle: Text(data[index]['description'] ?? "Unknown"),
-              ),
+              itemBuilder: (context, index) => ProductCard(product: data[index]),
             ),
           ),
         error: (e, _) => Center(child: Text('Error : $e'),),

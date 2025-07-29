@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:ticl_ecommerce/products/presentation/sort_fab_view.dart';
 import '../providers/product_provider.dart';
 import '../presentation/product_card.dart';
 
@@ -48,6 +49,9 @@ class ProductListScreen extends ConsumerWidget {
         error: (e, _) => Center(child: Text('Error : $e')),
         loading: () => Center(child: CircularProgressIndicator()),
       ),
+      floatingActionButton: SortFabView(onSortSelected: (order) {
+        notifier.sortProducts(order);
+      }),
     );
   }
 }

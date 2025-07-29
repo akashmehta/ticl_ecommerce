@@ -60,6 +60,17 @@ class ProductListNotifier
       }
     }
   }
+
+  void sortProducts(String order) {
+    List<Products> sortedProducts = [];
+    sortedProducts.addAll(_productData);
+    if (order == 'asc') {
+      sortedProducts.sort((a, b) => a.price!.compareTo(b.price!));
+    } else if (order == 'desc') {
+      sortedProducts.sort((a, b) => b.price!.compareTo(a.price!));
+    }
+    state = AsyncValue.data(sortedProducts);
+  }
 }
 
 final productListNotifierProvider =

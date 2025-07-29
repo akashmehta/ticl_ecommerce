@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:awesome_rating/awesome_rating.dart';
+import 'package:ticl_ecommerce/products/domain/product_data.dart';
 
 class ProductCard extends StatelessWidget {
-  final Map<String, dynamic> product;
+  final Products product;
 
   const ProductCard({super.key, required this.product});
 
@@ -29,12 +30,12 @@ class ProductCard extends StatelessWidget {
     );
   }
 
-  Widget imageView(Map<String, dynamic> product) => Container(
+  Widget imageView(Products product) => Container(
     padding: const EdgeInsets.all(6),
     width: double.infinity,
     alignment: Alignment.topCenter,
     child: CachedNetworkImage(
-      imageUrl: product['images'][0],
+      imageUrl: product.images![0],
       placeholder: (context, url) =>
           Image.asset('assets/placeholder_product.webp'),
       errorWidget: (context, error, stackTrace) => Icon(Icons.error),
@@ -42,19 +43,19 @@ class ProductCard extends StatelessWidget {
     ),
   );
 
-  Widget productDetailView(Map<String, dynamic> product) => Column(
+  Widget productDetailView(Products product) => Column(
     mainAxisAlignment: MainAxisAlignment.start,
     crossAxisAlignment: CrossAxisAlignment.start,
     children: [
       Text(
-        product['title'],
+        product.title!,
         style: const TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
         maxLines: 1,
         overflow: TextOverflow.ellipsis,
       ),
       const SizedBox(height: 6),
       Text(
-        product['description'] ?? '',
+        product.description ?? '',
         style: const TextStyle(fontSize: 12, fontWeight: FontWeight.normal),
         maxLines: 2,
         overflow: TextOverflow.ellipsis,
@@ -68,7 +69,7 @@ class ProductCard extends StatelessWidget {
             flex: 5,
             child: Text(
               textAlign: TextAlign.start,
-              '\u{20B9}${product['price'] ?? 'NA'}',
+              '\u{20B9}${product.price ?? 'NA'}',
               style: const TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
@@ -78,7 +79,7 @@ class ProductCard extends StatelessWidget {
             flex: 5,
             child: IgnorePointer(
               child: AwesomeStarRating(
-                rating: product['rating'],
+                rating: product.rating ?? 0.0,
                 starCount: 5,
                 allowHalfRating: true,
                 size: 15,
@@ -91,7 +92,7 @@ class ProductCard extends StatelessWidget {
     ],
   );
 
-  Widget buttonView(Map<String, dynamic> product) => ElevatedButton(
+  Widget buttonView(Products product) => ElevatedButton(
     onPressed: () {},
     style: ElevatedButton.styleFrom(
       backgroundColor: Colors.green,

@@ -26,6 +26,7 @@ abstract class Products with _$Products {
     @JsonKey(name: 'rating') double? rating,
     @JsonKey(name: 'tags') List<String>? tags,
     @JsonKey(name: 'brand') String? brand,
+    @JsonKey(name: 'weight') int? weight,
     @JsonKey(name: 'shippingInformation') String? shippingInformation,
     @JsonKey(name: 'images') List<String>? images,
     @JsonKey(name: 'thumbnail') String? thumbnail,

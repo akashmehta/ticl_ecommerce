@@ -1,6 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:ticl_ecommerce/products/domain/product_data.dart';
-import '../../core/providers/product_service_provider.dart';
+import '../../core/providers/service_providers.dart';
 import '../data/product_repository.dart';
 
 final productRepositoryProvider = Provider<ProductRepository>((ref) {
@@ -44,6 +44,8 @@ class ProductListNotifier
   bool get hasMore => _hasMore;
 
   bool get isLoading => _isLoading;
+
+  List<Products> get products => _productData;
 
   // search product from the list.
   void searchProducts(String value) {

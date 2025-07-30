@@ -286,6 +286,8 @@ mixin _$Products {
   List<String>? get tags => throw _privateConstructorUsedError;
   @JsonKey(name: 'brand')
   String? get brand => throw _privateConstructorUsedError;
+  @JsonKey(name: 'weight')
+  int? get weight => throw _privateConstructorUsedError;
   @JsonKey(name: 'shippingInformation')
   String? get shippingInformation => throw _privateConstructorUsedError;
   @JsonKey(name: 'images')
@@ -317,6 +319,7 @@ abstract class $ProductsCopyWith<$Res> {
     @JsonKey(name: 'rating') double? rating,
     @JsonKey(name: 'tags') List<String>? tags,
     @JsonKey(name: 'brand') String? brand,
+    @JsonKey(name: 'weight') int? weight,
     @JsonKey(name: 'shippingInformation') String? shippingInformation,
     @JsonKey(name: 'images') List<String>? images,
     @JsonKey(name: 'thumbnail') String? thumbnail,
@@ -346,6 +349,7 @@ class _$ProductsCopyWithImpl<$Res, $Val extends Products>
     Object? rating = freezed,
     Object? tags = freezed,
     Object? brand = freezed,
+    Object? weight = freezed,
     Object? shippingInformation = freezed,
     Object? images = freezed,
     Object? thumbnail = freezed,
@@ -384,6 +388,10 @@ class _$ProductsCopyWithImpl<$Res, $Val extends Products>
                 ? _value.brand
                 : brand // ignore: cast_nullable_to_non_nullable
                       as String?,
+            weight: freezed == weight
+                ? _value.weight
+                : weight // ignore: cast_nullable_to_non_nullable
+                      as int?,
             shippingInformation: freezed == shippingInformation
                 ? _value.shippingInformation
                 : shippingInformation // ignore: cast_nullable_to_non_nullable
@@ -420,6 +428,7 @@ abstract class _$$ProductsImplCopyWith<$Res>
     @JsonKey(name: 'rating') double? rating,
     @JsonKey(name: 'tags') List<String>? tags,
     @JsonKey(name: 'brand') String? brand,
+    @JsonKey(name: 'weight') int? weight,
     @JsonKey(name: 'shippingInformation') String? shippingInformation,
     @JsonKey(name: 'images') List<String>? images,
     @JsonKey(name: 'thumbnail') String? thumbnail,
@@ -448,6 +457,7 @@ class __$$ProductsImplCopyWithImpl<$Res>
     Object? rating = freezed,
     Object? tags = freezed,
     Object? brand = freezed,
+    Object? weight = freezed,
     Object? shippingInformation = freezed,
     Object? images = freezed,
     Object? thumbnail = freezed,
@@ -486,6 +496,10 @@ class __$$ProductsImplCopyWithImpl<$Res>
             ? _value.brand
             : brand // ignore: cast_nullable_to_non_nullable
                   as String?,
+        weight: freezed == weight
+            ? _value.weight
+            : weight // ignore: cast_nullable_to_non_nullable
+                  as int?,
         shippingInformation: freezed == shippingInformation
             ? _value.shippingInformation
             : shippingInformation // ignore: cast_nullable_to_non_nullable
@@ -515,6 +529,7 @@ class _$ProductsImpl implements _Products {
     @JsonKey(name: 'rating') this.rating,
     @JsonKey(name: 'tags') final List<String>? tags,
     @JsonKey(name: 'brand') this.brand,
+    @JsonKey(name: 'weight') this.weight,
     @JsonKey(name: 'shippingInformation') this.shippingInformation,
     @JsonKey(name: 'images') final List<String>? images,
     @JsonKey(name: 'thumbnail') this.thumbnail,
@@ -557,6 +572,9 @@ class _$ProductsImpl implements _Products {
   @JsonKey(name: 'brand')
   final String? brand;
   @override
+  @JsonKey(name: 'weight')
+  final int? weight;
+  @override
   @JsonKey(name: 'shippingInformation')
   final String? shippingInformation;
   final List<String>? _images;
@@ -576,7 +594,7 @@ class _$ProductsImpl implements _Products {
 
   @override
   String toString() {
-    return 'Products(id: $id, title: $title, description: $description, category: $category, price: $price, rating: $rating, tags: $tags, brand: $brand, shippingInformation: $shippingInformation, images: $images, thumbnail: $thumbnail)';
+    return 'Products(id: $id, title: $title, description: $description, category: $category, price: $price, rating: $rating, tags: $tags, brand: $brand, weight: $weight, shippingInformation: $shippingInformation, images: $images, thumbnail: $thumbnail)';
   }
 
   @override
@@ -594,6 +612,7 @@ class _$ProductsImpl implements _Products {
             (identical(other.rating, rating) || other.rating == rating) &&
             const DeepCollectionEquality().equals(other._tags, _tags) &&
             (identical(other.brand, brand) || other.brand == brand) &&
+            (identical(other.weight, weight) || other.weight == weight) &&
             (identical(other.shippingInformation, shippingInformation) ||
                 other.shippingInformation == shippingInformation) &&
             const DeepCollectionEquality().equals(other._images, _images) &&
@@ -613,6 +632,7 @@ class _$ProductsImpl implements _Products {
     rating,
     const DeepCollectionEquality().hash(_tags),
     brand,
+    weight,
     shippingInformation,
     const DeepCollectionEquality().hash(_images),
     thumbnail,
@@ -642,6 +662,7 @@ abstract class _Products implements Products {
     @JsonKey(name: 'rating') final double? rating,
     @JsonKey(name: 'tags') final List<String>? tags,
     @JsonKey(name: 'brand') final String? brand,
+    @JsonKey(name: 'weight') final int? weight,
     @JsonKey(name: 'shippingInformation') final String? shippingInformation,
     @JsonKey(name: 'images') final List<String>? images,
     @JsonKey(name: 'thumbnail') final String? thumbnail,
@@ -674,6 +695,9 @@ abstract class _Products implements Products {
   @override
   @JsonKey(name: 'brand')
   String? get brand;
+  @override
+  @JsonKey(name: 'weight')
+  int? get weight;
   @override
   @JsonKey(name: 'shippingInformation')
   String? get shippingInformation;

@@ -34,6 +34,7 @@ _$ProductsImpl _$$ProductsImplFromJson(Map<String, dynamic> json) =>
       rating: (json['rating'] as num?)?.toDouble(),
       tags: (json['tags'] as List<dynamic>?)?.map((e) => e as String).toList(),
       brand: json['brand'] as String?,
+      weight: (json['weight'] as num?)?.toInt(),
       shippingInformation: json['shippingInformation'] as String?,
       images: (json['images'] as List<dynamic>?)
           ?.map((e) => e as String)
@@ -51,6 +52,7 @@ Map<String, dynamic> _$$ProductsImplToJson(_$ProductsImpl instance) =>
       'rating': instance.rating,
       'tags': instance.tags,
       'brand': instance.brand,
+      'weight': instance.weight,
       'shippingInformation': instance.shippingInformation,
       'images': instance.images,
       'thumbnail': instance.thumbnail,

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:ticl_ecommerce/cart/cart_screen.dart';
-import 'package:ticl_ecommerce/filter/filter_screen.dart';
+import 'package:ticl_ecommerce/cart/presentation/cart_screen.dart';
+import 'package:ticl_ecommerce/filter/presentation/filter_screen.dart';
 import 'package:ticl_ecommerce/products/presentation/product_screen.dart';
 
 void main() {

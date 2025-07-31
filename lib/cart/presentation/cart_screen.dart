@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 
 class CartScreen extends StatelessWidget {
+  CartScreen(Function(int page) onPageChange);
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(

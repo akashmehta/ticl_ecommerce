@@ -10,10 +10,17 @@ void main() {
 
 final ValueNotifier<int> selectedIndex = ValueNotifier(0);
 
+Function(int) onPageChange = (page) {
+  selectedIndex.value = page;
+};
+
 class MyApp extends StatelessWidget {
   MyApp({super.key});
 
-  final List<Widget> pages = [ProductListScreen(), FilterScreen(), CartScreen(),];
+  final List<Widget> pages = [
+    ProductListScreen(onPageChange),
+    FilterScreen(onPageChange),
+    CartScreen(onPageChange),];
 
   @override
   Widget build(BuildContext context) {

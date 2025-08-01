@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:ticl_ecommerce/util/utility.dart';
 
 class CartScreen extends StatefulWidget {
-  const CartScreen({Key? key}) : super(key: key);
+  CartScreen(Function(int page) onPageChange);
 
   @override
   State<CartScreen> createState() => _CartScreenState();

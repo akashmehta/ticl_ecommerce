@@ -48,7 +48,7 @@ class _CartScreenState extends State<CartScreen> {
       0,
       (sum, item) => sum + item['quantity'] as int,
     );
-    
+
 
     return Scaffold(
       appBar: AppBar(title: const Text('My shopping cart')),

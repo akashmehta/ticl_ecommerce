@@ -1,5 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../../core/providers/product_service_provider.dart';
+import 'package:ticl_ecommerce/products/domain/product_data.dart';
+import '../../core/providers/service_providers.dart';
 import '../data/product_repository.dart';
 
 final productRepositoryProvider = Provider<ProductRepository>((ref) {
@@ -8,7 +9,7 @@ final productRepositoryProvider = Provider<ProductRepository>((ref) {
 });
 
 class ProductListNotifier
-    extends StateNotifier<AsyncValue<List<Map<String, dynamic>>>> {
+    extends StateNotifier<AsyncValue<List<Products>>> {
   ProductListNotifier(this._repository) : super(const AsyncValue.loading()) {
     fetchNextPage();
   }
@@ -20,7 +21,7 @@ class ProductListNotifier
   bool _hasMore = true;
   bool _isLoading = false;
 
-  final List<Map<String, dynamic>> _productData = [];
+  final List<Products> _productData = [];
 
   Future<void> fetchNextPage() async {
     if (!_hasMore || _isLoading) return;
@@ -44,13 +45,15 @@ class ProductListNotifier
 
   bool get isLoading => _isLoading;
 
+  List<Products> get products => _productData;
+
   // search product from the list.
   void searchProducts(String value) {
     if (value.isEmpty) {
       state = AsyncValue.data(_productData);
     } else {
-      List<Map<String, dynamic>> productList = _productData.where((product) {
-        return product['title'].toString().toLowerCase().startsWith(value.toLowerCase());
+      List<Products> productList = _productData.where((product) {
+        return product.title!.toLowerCase().startsWith(value.toLowerCase());
       }).toList();
       if (productList.isEmpty) {
         state = AsyncValue.error('No product found', StackTrace.current);
@@ -59,10 +62,21 @@ class ProductListNotifier
       }
     }
   }
+
+  void sortProducts(String order) {
+    List<Products> sortedProducts = [];
+    sortedProducts.addAll(_productData);
+    if (order == 'asc') {
+      sortedProducts.sort((a, b) => a.price!.compareTo(b.price!));
+    } else if (order == 'desc') {
+      sortedProducts.sort((a, b) => b.price!.compareTo(a.price!));
+    }
+    state = AsyncValue.data(sortedProducts);
+  }
 }
 
 final productListNotifierProvider =
-    StateNotifierProvider<ProductListNotifier, AsyncValue<List<Map<String, dynamic>>>>((ref) {
+    StateNotifierProvider<ProductListNotifier, AsyncValue<List<Products>>>((ref) {
       final repository = ref.read(productRepositoryProvider);
       return ProductListNotifier(repository);
     });

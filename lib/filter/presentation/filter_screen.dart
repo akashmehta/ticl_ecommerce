@@ -75,6 +75,8 @@ class FilterScreen extends ConsumerWidget {
         valueListenable: selectedFilter,
         builder: (_, value, __) {
           Map<String, bool> categoryFilters = {};
+          data.removeWhere((key, value) { return value.isEmpty;});
+          data[value]?.removeWhere((item) { return item == null || item.isEmpty;});
           data[value]?.forEach((item) {
             categoryFilters[item ?? ''] = false;
           });

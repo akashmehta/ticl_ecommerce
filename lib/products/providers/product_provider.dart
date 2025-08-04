@@ -94,38 +94,37 @@ class ProductListNotifier
   void filterProducts(Map<String, List<String?>> filterItems) {
     List<Products> filteredList = [];
     _filteredItems = filterItems;
-    filterItems.forEach((key, values) {
-      if (key == 'Category') {
-        filteredList.addAll(_productData.where((product) {
-          return filterItems[key]?.contains(product.category) ?? false;
-        }));
+
+    filteredList = _productData.where((product) {
+      bool matchesCategory = true;
+      bool matchesBrand = true;
+      bool matchesPrice = true;
+      bool matchesRating = true;
+
+      if (filterItems.containsKey('Category')) {
+        matchesCategory = filterItems['Category']?.contains(product.category) ?? false;
       }
-      if (key == 'Brand') {
-        filteredList.addAll(_productData.where((product) {
-          return filterItems[key]?.contains(product.brand) ?? false;
-        }));
+
+      if (filterItems.containsKey('Brand')) {
+        matchesBrand = filterItems['Brand']?.contains(product.brand) ?? false;
       }
-      if (key == 'Price') {
-        filteredList.addAll(
-          _productData.where((product) {
-            return filterItems[key]?.any((rangeStr) {
-              final range = priceRanges.firstWhere((range) => priceRange.contains(rangeStr));
-              return (product.price ?? 0) >= range.start && (product.price ?? 0) <= range.end;
-            }) ?? false;
-          })
-        );
+
+      if (filterItems.containsKey('Price')) {
+        matchesPrice = filterItems['Price']?.any((rangeStr) {
+          final range = priceRanges.firstWhere((range) => priceRange.contains(rangeStr));
+          return (product.price ?? 0) >= range.start && (product.price ?? 0) <= range.end;
+        }) ?? false;
       }
-      if (key == 'Rating') {
-        filteredList.addAll(
-          _productData.where((product) {
-            return filterItems[key]?.any((ratingStr) {
-              return product.rating?.toInt() == double.parse(ratingStr ?? 1.toString()).toInt();
-            }) ?? false;}
-          )
-        );
+
+      if (filterItems.containsKey('Rating')) {
+        matchesRating = filterItems['Rating']?.any((ratingStr) {
+          return product.rating?.toInt() == double.parse(ratingStr ?? 1.toString()).toInt();
+        }) ?? false;
       }
-    });
-    state = AsyncValue.data(filteredList.toSet().toList());
+
+      return matchesCategory && matchesBrand && matchesPrice && matchesRating;
+    }).toSet().toList();
+    state = AsyncValue.data(filteredList);
   }
 }
 

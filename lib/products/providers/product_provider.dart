@@ -1,6 +1,8 @@
+import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:ticl_ecommerce/products/domain/product_data.dart';
 import '../../core/providers/service_providers.dart';
+import '../../core/services/filter_service.dart';
 import '../data/product_repository.dart';
 
 final productRepositoryProvider = Provider<ProductRepository>((ref) {
@@ -22,6 +24,14 @@ class ProductListNotifier
   bool _isLoading = false;
 
   final List<Products> _productData = [];
+  final List<RangeValues> priceRanges = [
+    RangeValues(0, 500),
+    RangeValues(501, 1000),
+    RangeValues(1001, 2000),
+    RangeValues(2001, double.infinity),
+  ];
+
+  Map<String, List<String?>> _filteredItems = {};
 
   Future<void> fetchNextPage() async {
     if (!_hasMore || _isLoading) return;
@@ -45,7 +55,14 @@ class ProductListNotifier
 
   bool get isLoading => _isLoading;
 
+  bool get isFilterEnabled => _filteredItems.isNotEmpty;
+
   List<Products> get products => _productData;
+
+  void resetFilter() {
+    _filteredItems.clear();
+    state = AsyncValue.data(_productData);
+  }
 
   // search product from the list.
   void searchProducts(String value) {
@@ -72,6 +89,43 @@ class ProductListNotifier
       sortedProducts.sort((a, b) => b.price!.compareTo(a.price!));
     }
     state = AsyncValue.data(sortedProducts);
+  }
+
+  void filterProducts(Map<String, List<String?>> filterItems) {
+    List<Products> filteredList = [];
+    _filteredItems = filterItems;
+    filterItems.forEach((key, values) {
+      if (key == 'Category') {
+        filteredList.addAll(_productData.where((product) {
+          return filterItems[key]?.contains(product.category) ?? false;
+        }));
+      }
+      if (key == 'Brand') {
+        filteredList.addAll(_productData.where((product) {
+          return filterItems[key]?.contains(product.brand) ?? false;
+        }));
+      }
+      if (key == 'Price') {
+        filteredList.addAll(
+          _productData.where((product) {
+            return filterItems[key]?.any((rangeStr) {
+              final range = priceRanges.firstWhere((range) => priceRange.contains(rangeStr));
+              return (product.price ?? 0) >= range.start && (product.price ?? 0) <= range.end;
+            }) ?? false;
+          })
+        );
+      }
+      if (key == 'Rating') {
+        filteredList.addAll(
+          _productData.where((product) {
+            return filterItems[key]?.any((ratingStr) {
+              return product.rating?.toInt() == double.parse(ratingStr ?? 1.toString()).toInt();
+            }) ?? false;}
+          )
+        );
+      }
+    });
+    state = AsyncValue.data(filteredList.toSet().toList());
   }
 }
 

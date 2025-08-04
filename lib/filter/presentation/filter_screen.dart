@@ -1,16 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:ticl_ecommerce/main.dart';
+import 'package:ticl_ecommerce/products/providers/product_provider.dart';
 import '../providers/filter_provider.dart';
 
 class FilterScreen extends ConsumerWidget {
   // Category list and notifier for selection
   FilterScreen(Function(int page) onPageChange, {super.key});
   final ValueNotifier<String> selectedFilter = ValueNotifier(filterCategories[0]);
+  final ValueNotifier<Map<String, List<String?>>> filterTypes = ValueNotifier({});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final filterState = ref.watch(filterListNotifierProvider);
+    final productStateNotifier = ref.watch(productListNotifierProvider.notifier);
     return Scaffold(
       appBar: AppBar(title: Text('Filters'),),
       body: filterState.when(
@@ -32,8 +35,8 @@ class FilterScreen extends ConsumerWidget {
         padding: const EdgeInsets.all(16.0),
         child: ElevatedButton(
           onPressed: () {
-            // Apply logic here
             onPageChange(0);
+            productStateNotifier.filterProducts(filterTypes.value);
           },
           style: ElevatedButton.styleFrom(minimumSize: Size.fromHeight(48)),
           child: Text('Apply Filters'),
@@ -72,38 +75,56 @@ class FilterScreen extends ConsumerWidget {
         valueListenable: selectedFilter,
         builder: (_, value, __) {
           Map<String, bool> categoryFilters = {};
-          data[value]?.forEach((value) {
-            categoryFilters[value ?? ''] = false;
+          data.removeWhere((key, value) { return value.isEmpty;});
+          if (value == 'Category' || value == 'Brand') {
+            data[value]?.removeWhere((item) { return item == null ||
+                item.toString().isEmpty;});
+          }
+          data[value]?.forEach((item) {
+            categoryFilters[item ?? ''] = false;
           });
-          return categoryFilterValues(categoryFilters);
+          return categoryFilterValues(value, categoryFilters);
         },
       ),
     ),
   );
 
-  ValueListenableBuilder<Map<String, bool>> categoryFilterValues(
-    Map<String, bool> categories,
-  ) {
-    ValueNotifier<Map<String, bool>> localFilter = ValueNotifier(categories);
+  ValueListenableBuilder<Map<String, bool>> categoryFilterValues(String category,
+      Map<String, bool> subCategories,) {
+    ValueNotifier<Map<String, bool>> localFilter = ValueNotifier(subCategories);
+    localFilter.value.addAll({ for (var item in filterTypes.value[category] ?? []) item : true });
     return ValueListenableBuilder<Map<String, bool>>(
       valueListenable: localFilter,
       builder: (_, filters, __) {
         return ListView(
           children: filters.entries.map((entry) {
             return CheckboxListTile(
-              title: Text(entry.key),
+              title: Text(toCamelCase(entry.key.toString())),
               value: entry.value,
               onChanged: (newValue) {
-                localFilter.value = {
-                  ...filters,
-                  entry.key: newValue ?? false,
-                };
+                localFilter.value = {...filters, entry.key: newValue ?? false,};
+                List<String?> subCat = filterTypes.value[category] ?? [];
+                if (newValue == true) {
+                  subCat.add(entry.key);
+                } else {
+                  subCat.remove(entry.key);
+                }
+                filterTypes.value = {...filterTypes.value, category : subCat};
               },
             );
           }).toList(),
         );
       },
     );
+  }
+  
+  String toCamelCase(String input) {
+    String output = '';
+    List<String> items = input.split(' ');
+    for (var item in items) {
+      output = '$output${item.replaceFirst(item[0], item[0].toUpperCase())} ';
+    }
+    return output;
   }
 
 }

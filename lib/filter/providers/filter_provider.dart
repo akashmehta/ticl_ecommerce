@@ -10,8 +10,7 @@ final List<String> _filterCategories = [
   'Category',
   'Brand',
   'Price',
-  'Rating',
-  'Weight',
+  'Rating'
 ];
 
 List<String> get filterCategories => _filterCategories;

@@ -1,24 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:ticl_ecommerce/products/presentation/sort_fab_view.dart';
-import '../../filter/providers/filter_provider.dart';
 import '../providers/product_provider.dart';
 import '../presentation/product_card.dart';
 
 class ProductListScreen extends ConsumerWidget {
 
-  ProductListScreen(Function(int page) onPageChange, {super.key});
-
-  final ValueNotifier<bool> filterAvailable = ValueNotifier(false);
+  const ProductListScreen(Function(int page) onPageChange, {super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final notifier = ref.watch(productListNotifierProvider.notifier);
     final productState = ref.watch(productListNotifierProvider);
-    final filterState = ref.watch(filterListNotifierProvider);
-    filterState.when(data: (Map<String, List<String?>> items) => {
-      filterAvailable.value = items.isNotEmpty
-    }, error: (_,_) => {}, loading: () => {});
+
     return Scaffold(
       appBar: AppBar(
           title: TextField(
@@ -30,14 +24,18 @@ class ProductListScreen extends ConsumerWidget {
           ),
         ),
           actions: [
-            filterAvailable.value ? IconButton(icon: Icon(Icons.filter_alt_off), onPressed: () {}) : Spacer(),
+            notifier.isFilterEnabled ? IconButton(icon: Icon(Icons.filter_alt_off), onPressed: () {
+              notifier.resetFilter();
+            }) : Spacer(),
             IconButton(icon: Icon(Icons.shopping_cart), onPressed: () {}),
           ]),
       body: productState.when(
         data: (data) => NotificationListener<ScrollNotification>(
           onNotification: (scrollInfo) {
             if (scrollInfo.metrics.pixels == scrollInfo.metrics.maxScrollExtent
-                && notifier.hasMore && !notifier.isLoading) {
+                && notifier.hasMore
+                && !notifier.isLoading
+                && !notifier.isFilterEnabled) {
               notifier.fetchNextPage();
             }
             return false;
@@ -48,7 +46,7 @@ class ProductListScreen extends ConsumerWidget {
             crossAxisSpacing: 0,
             // Horizontal spacing between items
             mainAxisSpacing: 0,
-            childAspectRatio: 0.55,
+            childAspectRatio: 0.54,
             // Vertical spacing between items
             padding: EdgeInsets.all(6),
             children: List.generate(data.length, (index) {

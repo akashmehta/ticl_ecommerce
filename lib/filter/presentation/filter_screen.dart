@@ -76,7 +76,10 @@ class FilterScreen extends ConsumerWidget {
         builder: (_, value, __) {
           Map<String, bool> categoryFilters = {};
           data.removeWhere((key, value) { return value.isEmpty;});
-          data[value]?.removeWhere((item) { return item == null || item.isEmpty;});
+          if (value == 'Category' || value == 'Brand') {
+            data[value]?.removeWhere((item) { return item == null ||
+                item.toString().isEmpty;});
+          }
           data[value]?.forEach((item) {
             categoryFilters[item ?? ''] = false;
           });
@@ -96,7 +99,7 @@ class FilterScreen extends ConsumerWidget {
         return ListView(
           children: filters.entries.map((entry) {
             return CheckboxListTile(
-              title: Text(entry.key),
+              title: Text(toCamelCase(entry.key.toString())),
               value: entry.value,
               onChanged: (newValue) {
                 localFilter.value = {...filters, entry.key: newValue ?? false,};
@@ -113,6 +116,15 @@ class FilterScreen extends ConsumerWidget {
         );
       },
     );
+  }
+  
+  String toCamelCase(String input) {
+    String output = '';
+    List<String> items = input.split(' ');
+    for (var item in items) {
+      output = '$output${item.replaceFirst(item[0], item[0].toUpperCase())} ';
+    }
+    return output;
   }
 
 }

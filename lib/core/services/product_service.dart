@@ -17,8 +17,7 @@ class ProductService {
         throw Exception('Failed to load product data');
       }
     } catch (e) {
-      print('ProductList: Error $e');
-      throw e;
+      rethrow;
     }
   }
 

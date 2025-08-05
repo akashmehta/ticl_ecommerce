@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:ticl_ecommerce/products/presentation/sort_fab_view.dart';
+import '../../cart/providers/cart_provider.dart';
 import '../providers/product_provider.dart';
 import '../presentation/product_card.dart';
 
@@ -13,6 +14,7 @@ class ProductListScreen extends ConsumerWidget {
     final notifier = ref.watch(productListNotifierProvider.notifier);
     final productState = ref.watch(productListNotifierProvider);
 
+    final countNotifier = ValueNotifier<int>(0);
     return Scaffold(
       appBar: AppBar(
           title: TextField(
@@ -27,7 +29,35 @@ class ProductListScreen extends ConsumerWidget {
             notifier.isFilterEnabled ? IconButton(icon: Icon(Icons.filter_alt_off), onPressed: () {
               notifier.resetFilter();
             }) : Spacer(),
-            IconButton(icon: Icon(Icons.shopping_cart), onPressed: () {}),
+            ValueListenableBuilder(valueListenable: countNotifier, builder: (context, count, _) =>Stack(
+              children: [
+                IconButton(
+                  icon: Icon(Icons.shopping_cart),
+                  onPressed: () {
+                    // Navigate to cart page
+                  },
+                ),
+                if (count > 0)
+                  Positioned(right: 8, top: 8,
+                    child: Container(
+                      padding: EdgeInsets.all(4),
+                      decoration: BoxDecoration(
+                        color: Colors.red,
+                        shape: BoxShape.circle,
+                      ),
+                      constraints: BoxConstraints(minWidth: 20, minHeight: 20),
+                      child: Text(
+                        '$count',
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 12,
+                        ),
+                        textAlign: TextAlign.center,
+                      ),
+                    ),
+                  ),
+              ],
+            )),
           ]),
       body: productState.when(
         data: (data) => NotificationListener<ScrollNotification>(
@@ -50,7 +80,7 @@ class ProductListScreen extends ConsumerWidget {
             // Vertical spacing between items
             padding: EdgeInsets.all(6),
             children: List.generate(data.length, (index) {
-              return ProductCard(product: data[index]);
+              return ProductCard(product: data[index], countNotifier: countNotifier);
             }),
           ),
         ),

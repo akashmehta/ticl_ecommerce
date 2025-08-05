@@ -10,7 +10,8 @@ import '../../cart/providers/cart_provider.dart';
 class ProductCard extends ConsumerWidget {
   final Products product;
 
-  const ProductCard({super.key, required this.product});
+  final ValueNotifier<int> countNotifier;
+  const ProductCard({super.key, required this.product, required this.countNotifier});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -31,6 +32,7 @@ class ProductCard extends ConsumerWidget {
             productDetailView(product),
             buttonView(product, cart, (cart) {
               cartNotifier.updateCart(product.id ?? 0, cart);
+              cartNotifier.updateCount(countNotifier);
             }),
           ],
         ),

@@ -1,3 +1,4 @@
+import 'package:flutter/src/foundation/change_notifier.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:ticl_ecommerce/cart/data/cart_data.dart';
 
@@ -9,6 +10,14 @@ class CartNotifier extends StateNotifier<Map<int, Cart>> {
   }
 
   Cart getCartData(int productId) => state[productId] ?? Cart(isAddedToCart: false, quantity: 0);
+
+  void updateCount(ValueNotifier<int> countNotifier) {
+    int count = 0;
+    state.forEach((key, value) {
+      count += value.quantity;
+    });
+    countNotifier.value = count;
+  }
 }
 
 final cartNotifierProvider =

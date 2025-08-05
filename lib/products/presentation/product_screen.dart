@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:ticl_ecommerce/products/presentation/sort_fab_view.dart';
-import '../../cart/providers/cart_provider.dart';
 import '../providers/product_provider.dart';
 import '../presentation/product_card.dart';
 
@@ -38,19 +37,19 @@ class ProductListScreen extends ConsumerWidget {
                   },
                 ),
                 if (count > 0)
-                  Positioned(right: 8, top: 8,
+                  Positioned(right: 8, top: 6,
                     child: Container(
                       padding: EdgeInsets.all(4),
                       decoration: BoxDecoration(
                         color: Colors.red,
                         shape: BoxShape.circle,
                       ),
-                      constraints: BoxConstraints(minWidth: 20, minHeight: 20),
+                      constraints: BoxConstraints(minWidth: 15, minHeight: 15),
                       child: Text(
                         '$count',
                         style: TextStyle(
                           color: Colors.white,
-                          fontSize: 12,
+                          fontSize: 10,
                         ),
                         textAlign: TextAlign.center,
                       ),

@@ -89,11 +89,13 @@ Widget cartDetailView(
     children: [
       Text(
         cartItem?.title??"",
+        maxLines: 1,
         style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
       ),
       const SizedBox(height: 4),
       Text(
         cartItem?.description ?? "",
+        maxLines: 2,
         style: const TextStyle(fontSize: 13, color: Colors.black54),
       ),
       const SizedBox(height: 8),

@@ -294,10 +294,6 @@ mixin _$Products {
   List<String>? get images => throw _privateConstructorUsedError;
   @JsonKey(name: 'thumbnail')
   String? get thumbnail => throw _privateConstructorUsedError;
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  int get quantity => throw _privateConstructorUsedError;
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  bool get isAddedToCart => throw _privateConstructorUsedError;
 
   /// Serializes this Products to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -327,8 +323,6 @@ abstract class $ProductsCopyWith<$Res> {
     @JsonKey(name: 'shippingInformation') String? shippingInformation,
     @JsonKey(name: 'images') List<String>? images,
     @JsonKey(name: 'thumbnail') String? thumbnail,
-    @JsonKey(includeFromJson: false, includeToJson: false) int quantity,
-    @JsonKey(includeFromJson: false, includeToJson: false) bool isAddedToCart,
   });
 }
 
@@ -359,8 +353,6 @@ class _$ProductsCopyWithImpl<$Res, $Val extends Products>
     Object? shippingInformation = freezed,
     Object? images = freezed,
     Object? thumbnail = freezed,
-    Object? quantity = null,
-    Object? isAddedToCart = null,
   }) {
     return _then(
       _value.copyWith(
@@ -412,14 +404,6 @@ class _$ProductsCopyWithImpl<$Res, $Val extends Products>
                 ? _value.thumbnail
                 : thumbnail // ignore: cast_nullable_to_non_nullable
                       as String?,
-            quantity: null == quantity
-                ? _value.quantity
-                : quantity // ignore: cast_nullable_to_non_nullable
-                      as int,
-            isAddedToCart: null == isAddedToCart
-                ? _value.isAddedToCart
-                : isAddedToCart // ignore: cast_nullable_to_non_nullable
-                      as bool,
           )
           as $Val,
     );
@@ -448,8 +432,6 @@ abstract class _$$ProductsImplCopyWith<$Res>
     @JsonKey(name: 'shippingInformation') String? shippingInformation,
     @JsonKey(name: 'images') List<String>? images,
     @JsonKey(name: 'thumbnail') String? thumbnail,
-    @JsonKey(includeFromJson: false, includeToJson: false) int quantity,
-    @JsonKey(includeFromJson: false, includeToJson: false) bool isAddedToCart,
   });
 }
 
@@ -479,8 +461,6 @@ class __$$ProductsImplCopyWithImpl<$Res>
     Object? shippingInformation = freezed,
     Object? images = freezed,
     Object? thumbnail = freezed,
-    Object? quantity = null,
-    Object? isAddedToCart = null,
   }) {
     return _then(
       _$ProductsImpl(
@@ -532,14 +512,6 @@ class __$$ProductsImplCopyWithImpl<$Res>
             ? _value.thumbnail
             : thumbnail // ignore: cast_nullable_to_non_nullable
                   as String?,
-        quantity: null == quantity
-            ? _value.quantity
-            : quantity // ignore: cast_nullable_to_non_nullable
-                  as int,
-        isAddedToCart: null == isAddedToCart
-            ? _value.isAddedToCart
-            : isAddedToCart // ignore: cast_nullable_to_non_nullable
-                  as bool,
       ),
     );
   }
@@ -561,9 +533,6 @@ class _$ProductsImpl implements _Products {
     @JsonKey(name: 'shippingInformation') this.shippingInformation,
     @JsonKey(name: 'images') final List<String>? images,
     @JsonKey(name: 'thumbnail') this.thumbnail,
-    @JsonKey(includeFromJson: false, includeToJson: false) this.quantity = 0,
-    @JsonKey(includeFromJson: false, includeToJson: false)
-    this.isAddedToCart = false,
   }) : _tags = tags,
        _images = images;
 
@@ -622,16 +591,10 @@ class _$ProductsImpl implements _Products {
   @override
   @JsonKey(name: 'thumbnail')
   final String? thumbnail;
-  @override
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  final int quantity;
-  @override
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  final bool isAddedToCart;
 
   @override
   String toString() {
-    return 'Products(id: $id, title: $title, description: $description, category: $category, price: $price, rating: $rating, tags: $tags, brand: $brand, weight: $weight, shippingInformation: $shippingInformation, images: $images, thumbnail: $thumbnail, quantity: $quantity, isAddedToCart: $isAddedToCart)';
+    return 'Products(id: $id, title: $title, description: $description, category: $category, price: $price, rating: $rating, tags: $tags, brand: $brand, weight: $weight, shippingInformation: $shippingInformation, images: $images, thumbnail: $thumbnail)';
   }
 
   @override
@@ -654,11 +617,7 @@ class _$ProductsImpl implements _Products {
                 other.shippingInformation == shippingInformation) &&
             const DeepCollectionEquality().equals(other._images, _images) &&
             (identical(other.thumbnail, thumbnail) ||
-                other.thumbnail == thumbnail) &&
-            (identical(other.quantity, quantity) ||
-                other.quantity == quantity) &&
-            (identical(other.isAddedToCart, isAddedToCart) ||
-                other.isAddedToCart == isAddedToCart));
+                other.thumbnail == thumbnail));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
@@ -677,8 +636,6 @@ class _$ProductsImpl implements _Products {
     shippingInformation,
     const DeepCollectionEquality().hash(_images),
     thumbnail,
-    quantity,
-    isAddedToCart,
   );
 
   /// Create a copy of Products
@@ -709,9 +666,6 @@ abstract class _Products implements Products {
     @JsonKey(name: 'shippingInformation') final String? shippingInformation,
     @JsonKey(name: 'images') final List<String>? images,
     @JsonKey(name: 'thumbnail') final String? thumbnail,
-    @JsonKey(includeFromJson: false, includeToJson: false) final int quantity,
-    @JsonKey(includeFromJson: false, includeToJson: false)
-    final bool isAddedToCart,
   }) = _$ProductsImpl;
 
   factory _Products.fromJson(Map<String, dynamic> json) =
@@ -753,12 +707,6 @@ abstract class _Products implements Products {
   @override
   @JsonKey(name: 'thumbnail')
   String? get thumbnail;
-  @override
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  int get quantity;
-  @override
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  bool get isAddedToCart;
 
   /// Create a copy of Products
   /// with the given fields replaced by the non-null parameter values.

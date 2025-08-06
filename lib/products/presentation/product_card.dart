@@ -4,14 +4,12 @@ import 'package:awesome_rating/awesome_rating.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:ticl_ecommerce/products/domain/product_data.dart';
 
-import '../../cart/data/cart_data.dart';
+import '../../cart/domain/cart_data.dart';
 import '../../cart/providers/cart_provider.dart';
 
 class ProductCard extends ConsumerWidget {
   final Products product;
-
-  final ValueNotifier<int> countNotifier;
-  const ProductCard({super.key, required this.product, required this.countNotifier});
+  const ProductCard({super.key, required this.product});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -32,7 +30,7 @@ class ProductCard extends ConsumerWidget {
             productDetailView(product),
             buttonView(product, cart, (cart) {
               cartNotifier.updateCart(product.id ?? 0, cart);
-              cartNotifier.updateCount(countNotifier);
+              cartNotifier.updateCount();
             }),
           ],
         ),
@@ -110,10 +108,10 @@ class ProductCard extends ConsumerWidget {
           IconButton(
             icon: Icon(Icons.remove),
             onPressed: () {
-              if (item.quantity > 1) {
+              if ((item.quantity ?? 0) > 1) {
                 cartNotifier.value = item.copyWith(
                   isAddedToCart: true,
-                  quantity: item.quantity - 1,
+                  quantity: (item.quantity ?? 0) - 1,
                 );
               } else {
                 cartNotifier.value = item.copyWith(
@@ -130,7 +128,7 @@ class ProductCard extends ConsumerWidget {
             onPressed: () {
               cartNotifier.value = item.copyWith(
                 isAddedToCart: true,
-                quantity: item.quantity + 1,
+                quantity: (item.quantity ?? 0) + 1,
               );
               onUpdateCart(cartNotifier.value);
             },

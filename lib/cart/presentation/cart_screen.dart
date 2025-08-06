@@ -38,6 +38,30 @@ class CartScreen extends ConsumerWidget {
             ),
           ),
           Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 0.0),
+            child: SizedBox(
+              width: double.infinity,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Expanded(
+                    flex: 5,
+                    child: Text('Total Cost',
+                        style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
+                  ),
+                  Expanded(
+                    flex: 5,
+                    child: Text(
+                        '${cartNotifier.totalCost()}',
+                        textAlign: TextAlign.end,
+                        style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16)
+                    ),
+                  ),
+                ],
+              ),
+            )
+          ),
+          Padding(
             padding: const EdgeInsets.all(16.0),
             child: SizedBox(
               width: double.infinity,

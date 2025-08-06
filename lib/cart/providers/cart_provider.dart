@@ -13,6 +13,14 @@ class CartNotifier extends StateNotifier<Map<int, Cart>> {
     productState = _ref.watch(productListNotifierProvider);
   }
 
+  int totalCost() {
+    int total = 0;
+    state.forEach((key, value) {
+      total += (value.price ?? 0) * (value.quantity ?? 0);
+    });
+    return total;
+  }
+
   void loadCartScreen() {
     productState?.when(data: (data) {
       data

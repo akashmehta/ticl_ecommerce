@@ -202,6 +202,8 @@ mixin _$Cart {
   String? get delivery => throw _privateConstructorUsedError;
   @JsonKey(name: 'quantity')
   int? get quantity => throw _privateConstructorUsedError;
+  @JsonKey(name: 'shippingInformation')
+  String? get shippingInformation => throw _privateConstructorUsedError;
   @JsonKey(includeToJson: false, includeFromJson: false)
   bool get isAddedToCart => throw _privateConstructorUsedError;
 
@@ -227,6 +229,7 @@ abstract class $CartCopyWith<$Res> {
     @JsonKey(name: 'price') int? price,
     @JsonKey(name: 'delivery') String? delivery,
     @JsonKey(name: 'quantity') int? quantity,
+    @JsonKey(name: 'shippingInformation') String? shippingInformation,
     @JsonKey(includeToJson: false, includeFromJson: false) bool isAddedToCart,
   });
 }
@@ -253,6 +256,7 @@ class _$CartCopyWithImpl<$Res, $Val extends Cart>
     Object? price = freezed,
     Object? delivery = freezed,
     Object? quantity = freezed,
+    Object? shippingInformation = freezed,
     Object? isAddedToCart = null,
   }) {
     return _then(
@@ -285,6 +289,10 @@ class _$CartCopyWithImpl<$Res, $Val extends Cart>
                 ? _value.quantity
                 : quantity // ignore: cast_nullable_to_non_nullable
                       as int?,
+            shippingInformation: freezed == shippingInformation
+                ? _value.shippingInformation
+                : shippingInformation // ignore: cast_nullable_to_non_nullable
+                      as String?,
             isAddedToCart: null == isAddedToCart
                 ? _value.isAddedToCart
                 : isAddedToCart // ignore: cast_nullable_to_non_nullable
@@ -311,6 +319,7 @@ abstract class _$$CartImplCopyWith<$Res> implements $CartCopyWith<$Res> {
     @JsonKey(name: 'price') int? price,
     @JsonKey(name: 'delivery') String? delivery,
     @JsonKey(name: 'quantity') int? quantity,
+    @JsonKey(name: 'shippingInformation') String? shippingInformation,
     @JsonKey(includeToJson: false, includeFromJson: false) bool isAddedToCart,
   });
 }
@@ -334,6 +343,7 @@ class __$$CartImplCopyWithImpl<$Res>
     Object? price = freezed,
     Object? delivery = freezed,
     Object? quantity = freezed,
+    Object? shippingInformation = freezed,
     Object? isAddedToCart = null,
   }) {
     return _then(
@@ -366,6 +376,10 @@ class __$$CartImplCopyWithImpl<$Res>
             ? _value.quantity
             : quantity // ignore: cast_nullable_to_non_nullable
                   as int?,
+        shippingInformation: freezed == shippingInformation
+            ? _value.shippingInformation
+            : shippingInformation // ignore: cast_nullable_to_non_nullable
+                  as String?,
         isAddedToCart: null == isAddedToCart
             ? _value.isAddedToCart
             : isAddedToCart // ignore: cast_nullable_to_non_nullable
@@ -386,6 +400,7 @@ class _$CartImpl implements _Cart {
     @JsonKey(name: 'price') this.price,
     @JsonKey(name: 'delivery') this.delivery,
     @JsonKey(name: 'quantity') this.quantity,
+    @JsonKey(name: 'shippingInformation') this.shippingInformation,
     @JsonKey(includeToJson: false, includeFromJson: false)
     this.isAddedToCart = false,
   });
@@ -415,12 +430,15 @@ class _$CartImpl implements _Cart {
   @JsonKey(name: 'quantity')
   final int? quantity;
   @override
+  @JsonKey(name: 'shippingInformation')
+  final String? shippingInformation;
+  @override
   @JsonKey(includeToJson: false, includeFromJson: false)
   final bool isAddedToCart;
 
   @override
   String toString() {
-    return 'Cart(id: $id, title: $title, image: $image, description: $description, price: $price, delivery: $delivery, quantity: $quantity, isAddedToCart: $isAddedToCart)';
+    return 'Cart(id: $id, title: $title, image: $image, description: $description, price: $price, delivery: $delivery, quantity: $quantity, shippingInformation: $shippingInformation, isAddedToCart: $isAddedToCart)';
   }
 
   @override
@@ -438,6 +456,8 @@ class _$CartImpl implements _Cart {
                 other.delivery == delivery) &&
             (identical(other.quantity, quantity) ||
                 other.quantity == quantity) &&
+            (identical(other.shippingInformation, shippingInformation) ||
+                other.shippingInformation == shippingInformation) &&
             (identical(other.isAddedToCart, isAddedToCart) ||
                 other.isAddedToCart == isAddedToCart));
   }
@@ -453,6 +473,7 @@ class _$CartImpl implements _Cart {
     price,
     delivery,
     quantity,
+    shippingInformation,
     isAddedToCart,
   );
 
@@ -479,6 +500,7 @@ abstract class _Cart implements Cart {
     @JsonKey(name: 'price') final int? price,
     @JsonKey(name: 'delivery') final String? delivery,
     @JsonKey(name: 'quantity') final int? quantity,
+    @JsonKey(name: 'shippingInformation') final String? shippingInformation,
     @JsonKey(includeToJson: false, includeFromJson: false)
     final bool isAddedToCart,
   }) = _$CartImpl;
@@ -506,6 +528,9 @@ abstract class _Cart implements Cart {
   @override
   @JsonKey(name: 'quantity')
   int? get quantity;
+  @override
+  @JsonKey(name: 'shippingInformation')
+  String? get shippingInformation;
   @override
   @JsonKey(includeToJson: false, includeFromJson: false)
   bool get isAddedToCart;

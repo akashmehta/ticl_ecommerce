@@ -34,6 +34,7 @@ class CartNotifier extends StateNotifier<Map<int, Cart>> {
               price: (product.price?.toInt() ?? 0),
               description: product.description,
               image: product.images![0],
+              shippingInformation: product.shippingInformation
             );
           }).forEach((cart) {
             state[(cart.id ?? 0)] = cart;

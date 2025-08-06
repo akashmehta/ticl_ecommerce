@@ -1,20 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:ticl_ecommerce/cart/providers/cart_provider.dart';
-import 'package:ticl_ecommerce/main.dart';
 import 'package:ticl_ecommerce/products/presentation/sort_fab_view.dart';
 import '../providers/product_provider.dart';
 import '../presentation/product_card.dart';
 
 class ProductListScreen extends ConsumerWidget {
-
-  const ProductListScreen(Function(int page) onPageChange, {super.key});
+  const ProductListScreen({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final notifier = ref.watch(productListNotifierProvider.notifier);
     final productState = ref.watch(productListNotifierProvider);
-    final cartNotifier = ref.watch(cartNotifierProvider.notifier);
 
     return Scaffold(
       appBar: AppBar(
@@ -29,39 +25,7 @@ class ProductListScreen extends ConsumerWidget {
           actions: [
             notifier.isFilterEnabled ? IconButton(icon: Icon(Icons.filter_alt_off), onPressed: () {
               notifier.resetFilter();
-            }) : Spacer(),
-            ValueListenableBuilder(valueListenable: cartNotifier.countNotifier,
-                builder: (context, count, _) =>
-                    Stack(
-                      children: [
-                        IconButton(
-                          icon: Icon(Icons.shopping_cart),
-                          onPressed: () {
-                            onPageChange(2);
-                          },
-                        ),
-                        if (count > 0)
-                          Positioned(right: 8, top: 6,
-                            child: Container(
-                              padding: EdgeInsets.all(4),
-                              decoration: BoxDecoration(
-                                color: Colors.red,
-                                shape: BoxShape.circle,
-                              ),
-                              constraints: BoxConstraints(
-                                  minWidth: 15, minHeight: 15),
-                              child: Text(
-                                '$count',
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 10,
-                                ),
-                                textAlign: TextAlign.center,
-                              ),
-                            ),
-                          ),
-                      ],
-                    )),
+            }) : Spacer()
           ]),
       body: productState.when(
         data: (data) => NotificationListener<ScrollNotification>(

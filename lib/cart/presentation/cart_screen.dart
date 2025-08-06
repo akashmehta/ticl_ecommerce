@@ -129,7 +129,7 @@ Widget cartDetailView(
       ),
       const SizedBox(height: 4),
       Text(
-        'Delivery: ${cartItem?.delivery}',
+        'Delivery: ${cartItem?.shippingInformation}',
         style: const TextStyle(fontSize: 12, color: Colors.black54),
       ),
       const SizedBox(height: 8),

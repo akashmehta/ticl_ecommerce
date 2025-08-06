@@ -22,6 +22,7 @@ abstract class Cart with _$Cart {
     @JsonKey(name: 'price') int? price,
     @JsonKey(name: 'delivery') String? delivery,
     @JsonKey(name: 'quantity') int? quantity,
+    @JsonKey(name: 'shippingInformation') String? shippingInformation,
     @JsonKey(includeToJson: false, includeFromJson: false)
     @Default(false) bool isAddedToCart
   }) = _Cart;

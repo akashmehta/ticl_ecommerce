@@ -13,10 +13,10 @@ class CartNotifier extends StateNotifier<Map<int, CartItem>> {
     productState = _ref.watch(productListNotifierProvider);
   }
 
-  int totalCost() {
-    int total = 0;
+  double totalCost() {
+    double total = 0.0;
     state.forEach((key, value) {
-      total += (value.price ?? 0) * (value.quantity ?? 0);
+      total += (value.price ?? 0.0) * (value.quantity ?? 0);
     });
     return total;
   }
@@ -31,7 +31,7 @@ class CartNotifier extends StateNotifier<Map<int, CartItem>> {
               isAddedToCart: true,
               quantity: state[product.id ?? 0]?.quantity ?? 0,
               title: product.title,
-              price: (product.price?.toInt() ?? 0),
+              price: (product.price ?? 0.0),
               description: product.description,
               image: product.images![0],
               shippingInformation: product.shippingInformation

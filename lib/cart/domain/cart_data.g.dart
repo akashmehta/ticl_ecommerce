@@ -22,7 +22,7 @@ _$CartItemImpl _$$CartItemImplFromJson(Map<String, dynamic> json) =>
       title: json['title'] as String?,
       image: json['image'] as String?,
       description: json['description'] as String?,
-      price: (json['price'] as num?)?.toInt(),
+      price: (json['price'] as num?)?.toDouble(),
       delivery: json['delivery'] as String?,
       quantity: (json['quantity'] as num?)?.toInt(),
       shippingInformation: json['shippingInformation'] as String?,

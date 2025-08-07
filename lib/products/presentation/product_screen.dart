@@ -5,7 +5,7 @@ import '../providers/product_provider.dart';
 import '../presentation/product_card.dart';
 
 class ProductListScreen extends ConsumerWidget {
-    const ProductListScreen({super.key});
+  const ProductListScreen({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -14,26 +14,40 @@ class ProductListScreen extends ConsumerWidget {
 
     return Scaffold(
       appBar: AppBar(
-          title: TextField(
-          onChanged: (value) { notifier.searchProducts(value); },
-          decoration: InputDecoration(
-            hintText: 'Search...',
-            prefixIcon: Icon(Icons.search),
-            border: InputBorder.none,
+        title: Text('Products'),
+        bottom: PreferredSize(
+          preferredSize: Size.fromHeight(56.0),
+          child: TextField(
+            onChanged: (value) {
+              notifier.searchProducts(value);
+            },
+            decoration: InputDecoration(
+                hintText: 'Search...',
+                prefixIcon: Icon(Icons.search),
+                contentPadding: EdgeInsets.symmetric(vertical: 12.0),
+                border: InputBorder.none
+            ),
           ),
         ),
         actions: [
-          notifier.isFilterEnabled ? IconButton(icon: Icon(Icons.filter_alt_off), onPressed: () {
-            notifier.resetFilter();
-          }) : Spacer()
-        ]),
+          notifier.isFilterEnabled
+              ? IconButton(
+            icon: Icon(Icons.filter_alt_off),
+            onPressed: () {
+              notifier.resetFilter();
+            },
+          )
+              : SizedBox.shrink(),
+        ],
+      ),
       body: productState.when(
         data: (data) => NotificationListener<ScrollNotification>(
           onNotification: (scrollInfo) {
-            if (scrollInfo.metrics.pixels == scrollInfo.metrics.maxScrollExtent
-                && notifier.hasMore
-                && !notifier.isLoading
-                && !notifier.isFilterEnabled) {
+            if (scrollInfo.metrics.pixels ==
+                    scrollInfo.metrics.maxScrollExtent &&
+                notifier.hasMore &&
+                !notifier.isLoading &&
+                !notifier.isFilterEnabled) {
               notifier.fetchNextPage();
             }
             return false;
@@ -55,9 +69,11 @@ class ProductListScreen extends ConsumerWidget {
         error: (e, _) => Center(child: Text('Error : $e')),
         loading: () => Center(child: CircularProgressIndicator()),
       ),
-      floatingActionButton: SortFabView(onSortSelected: (order) {
-        notifier.sortProducts(order);
-      }),
+      floatingActionButton: SortFabView(
+        onSortSelected: (order) {
+          notifier.sortProducts(order);
+        },
+      ),
     );
   }
 }

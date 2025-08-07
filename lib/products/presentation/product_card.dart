@@ -5,8 +5,9 @@ import 'package:ticl_ecommerce/products/domain/product_data.dart';
 
 class ProductCard extends StatelessWidget {
   final Products product;
+  final VoidCallback? onPressCard;
 
-  const ProductCard({super.key, required this.product});
+  const ProductCard({super.key, required this.product, this.onPressCard});
 
   @override
   Widget build(BuildContext context) {
@@ -16,15 +17,18 @@ class ProductCard extends StatelessWidget {
       elevation: 4,
       child: Padding(
         padding: const EdgeInsets.all(6),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            // Top row: Title, Description, and Image
-            imageView(product),
-            productDetailView(product),
-            buttonView(product),
-          ],
+        child: GestureDetector(
+          onTap: onPressCard,
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              // Top row: Title, Description, and Image
+              imageView(product),
+              productDetailView(product, onPressCard),
+              buttonView(product),
+            ],
+          ),
         ),
       ),
     );
@@ -43,54 +47,58 @@ class ProductCard extends StatelessWidget {
     ),
   );
 
-  Widget productDetailView(Products product) => Column(
-    mainAxisAlignment: MainAxisAlignment.start,
-    crossAxisAlignment: CrossAxisAlignment.start,
-    children: [
-      Text(
-        product.title!,
-        style: const TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
-        maxLines: 1,
-        overflow: TextOverflow.ellipsis,
-      ),
-      const SizedBox(height: 6),
-      Text(
-        product.description ?? '',
-        style: const TextStyle(fontSize: 12, fontWeight: FontWeight.normal),
-        maxLines: 2,
-        overflow: TextOverflow.ellipsis,
-      ),
-      const SizedBox(height: 10),
-
-      Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+  Widget productDetailView(Products product, VoidCallback? onPressCard) =>
+      Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Expanded(
-            flex: 5,
-            child: Text(
-              textAlign: TextAlign.start,
-              '\u{20B9}${product.price ?? 'NA'}',
-              style: const TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
-            ),
+          Text(
+            product.title!,
+            style: const TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
           ),
-          Expanded(
-            flex: 5,
-            child: IgnorePointer(
-              child: AwesomeStarRating(
-                rating: product.rating ?? 0.0,
-                starCount: 5,
-                allowHalfRating: true,
-                size: 15,
+          const SizedBox(height: 6),
+          Text(
+            product.description ?? '',
+            style: const TextStyle(fontSize: 12, fontWeight: FontWeight.normal),
+            maxLines: 2,
+            overflow: TextOverflow.ellipsis,
+          ),
+          const SizedBox(height: 10),
+
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Expanded(
+                flex: 5,
+                child: Text(
+                  textAlign: TextAlign.start,
+                  '\u{20B9}${product.price ?? 'NA'}',
+                  style: const TextStyle(
+                    fontSize: 12,
+                    fontWeight: FontWeight.bold,
+                  ),
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                ),
               ),
-            ),
+              Expanded(
+                flex: 5,
+                child: IgnorePointer(
+                  child: AwesomeStarRating(
+                    rating: product.rating ?? 0.0,
+                    starCount: 5,
+                    allowHalfRating: true,
+                    size: 15,
+                  ),
+                ),
+              ),
+            ],
           ),
+          const SizedBox(height: 10),
         ],
-      ),
-      const SizedBox(height: 10),
-    ],
-  );
+      );
 
   Widget buttonView(Products product) => ElevatedButton(
     onPressed: () {},

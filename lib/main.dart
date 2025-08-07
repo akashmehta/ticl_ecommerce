@@ -5,7 +5,7 @@ import 'package:ticl_ecommerce/filter/presentation/filter_screen.dart';
 import 'package:ticl_ecommerce/products/presentation/product_screen.dart';
 
 void main() {
-  runApp( ProviderScope(child: MyApp()) );
+  runApp(ProviderScope(child: MyApp()));
 }
 
 final ValueNotifier<int> selectedIndex = ValueNotifier(0);
@@ -20,7 +20,8 @@ class MyApp extends StatelessWidget {
   final List<Widget> pages = [
     ProductListScreen(onPageChange),
     FilterScreen(onPageChange),
-    CartScreen(onPageChange),];
+    CartScreen(onPageChange),
+  ];
 
   @override
   Widget build(BuildContext context) {
@@ -38,13 +39,25 @@ class MyApp extends StatelessWidget {
               onTap: (newIndex) => selectedIndex.value = newIndex,
               items: const [
                 BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
-                BottomNavigationBarItem(icon: Icon(Icons.filter_list_alt), label: 'Filter'),
-                BottomNavigationBarItem(icon: Icon(Icons.shopping_cart), label: 'Cart'),
+                BottomNavigationBarItem(
+                  icon: Icon(Icons.filter_list_alt),
+                  label: 'Filter',
+                ),
+                BottomNavigationBarItem(
+                  icon: Icon(Icons.shopping_cart),
+                  label: 'Cart',
+                ),
               ],
             ),
           );
         },
       ),
+      routes: {
+        '/ProductDetailView': (context) => Scaffold(
+          appBar: AppBar(title: const Text('Product Detail')),
+          body: const Center(child: Text('Product Detail View')),
+        ),
+      },
     );
   }
 }

@@ -42,12 +42,17 @@ class CartNotifier extends StateNotifier<Map<int, CartItem>> {
     }, error: (e, _) => null, loading: () => null);
   }
 
-  void updateCart(int productId, CartItem cart) {
-    state[productId] = cart;
+  void removeItem(int productId) {
+    state.remove(productId);
   }
 
-  CartItem getCartData(int productId) => state[productId] ?? CartItem(
-      isAddedToCart: false, quantity: 0);
+  void updateCart(int productId, CartItem cart) {
+    if (cart.quantity == 0) {
+      state.remove(productId);
+    } else {
+      state[productId] = cart;
+    }
+  }
 
   void updateCount() {
     int count = 0;
@@ -56,6 +61,17 @@ class CartNotifier extends StateNotifier<Map<int, CartItem>> {
     });
     countNotifier.value = count;
   }
+
+  int totalItems() {
+    int count = 0;
+    state.forEach((key, value) {
+      count += (value.quantity ?? 0);
+    });
+    return count;
+  }
+
+  CartItem getCartData(int productId) => state[productId] ?? CartItem(
+      isAddedToCart: false, quantity: 0);
 }
 
 final cartNotifierProvider =

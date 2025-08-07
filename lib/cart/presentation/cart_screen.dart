@@ -56,7 +56,7 @@ class CartScreen extends ConsumerWidget {
                         Expanded(
                           flex: 5,
                           child: Text(
-                              '${cartNotifier.totalCost()}',
+                              cartNotifier.totalCost().toStringAsFixed(2),
                               textAlign: TextAlign.end,
                               style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16)
                           ),
@@ -122,12 +122,6 @@ Widget cartDetailView(
         ),
         const SizedBox(height: 4),
         Text(
-          cartItem?.description ?? "",
-          maxLines: 2,
-          style: const TextStyle(fontSize: 13, color: Colors.black54),
-        ),
-        const SizedBox(height: 8),
-        Text(
           'Rs. ${cartItem?.price}',
           style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 15),
         ),
@@ -157,7 +151,7 @@ Widget cartDetailView(
               }),
               Text(
                 '${item.quantity}',
-                style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                style: const TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
               ),
               IconButton(icon: const Icon(Icons.add), onPressed: () {
                 cartNotifier.value = item.copyWith(

@@ -19,7 +19,7 @@ abstract class CartItem with _$CartItem {
     @JsonKey(name: 'title') String? title,
     @JsonKey(name: 'image') String? image,
     @JsonKey(name: 'description') String? description,
-    @JsonKey(name: 'price') int? price,
+    @JsonKey(name: 'price') double? price,
     @JsonKey(name: 'delivery') String? delivery,
     @JsonKey(name: 'quantity') int? quantity,
     @JsonKey(name: 'shippingInformation') String? shippingInformation,

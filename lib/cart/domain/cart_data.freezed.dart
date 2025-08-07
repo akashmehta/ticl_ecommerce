@@ -197,7 +197,7 @@ mixin _$CartItem {
   @JsonKey(name: 'description')
   String? get description => throw _privateConstructorUsedError;
   @JsonKey(name: 'price')
-  int? get price => throw _privateConstructorUsedError;
+  double? get price => throw _privateConstructorUsedError;
   @JsonKey(name: 'delivery')
   String? get delivery => throw _privateConstructorUsedError;
   @JsonKey(name: 'quantity')
@@ -227,7 +227,7 @@ abstract class $CartItemCopyWith<$Res> {
     @JsonKey(name: 'title') String? title,
     @JsonKey(name: 'image') String? image,
     @JsonKey(name: 'description') String? description,
-    @JsonKey(name: 'price') int? price,
+    @JsonKey(name: 'price') double? price,
     @JsonKey(name: 'delivery') String? delivery,
     @JsonKey(name: 'quantity') int? quantity,
     @JsonKey(name: 'shippingInformation') String? shippingInformation,
@@ -281,7 +281,7 @@ class _$CartItemCopyWithImpl<$Res, $Val extends CartItem>
             price: freezed == price
                 ? _value.price
                 : price // ignore: cast_nullable_to_non_nullable
-                      as int?,
+                      as double?,
             delivery: freezed == delivery
                 ? _value.delivery
                 : delivery // ignore: cast_nullable_to_non_nullable
@@ -318,7 +318,7 @@ abstract class _$$CartItemImplCopyWith<$Res>
     @JsonKey(name: 'title') String? title,
     @JsonKey(name: 'image') String? image,
     @JsonKey(name: 'description') String? description,
-    @JsonKey(name: 'price') int? price,
+    @JsonKey(name: 'price') double? price,
     @JsonKey(name: 'delivery') String? delivery,
     @JsonKey(name: 'quantity') int? quantity,
     @JsonKey(name: 'shippingInformation') String? shippingInformation,
@@ -371,7 +371,7 @@ class __$$CartItemImplCopyWithImpl<$Res>
         price: freezed == price
             ? _value.price
             : price // ignore: cast_nullable_to_non_nullable
-                  as int?,
+                  as double?,
         delivery: freezed == delivery
             ? _value.delivery
             : delivery // ignore: cast_nullable_to_non_nullable
@@ -426,7 +426,7 @@ class _$CartItemImpl implements _CartItem {
   final String? description;
   @override
   @JsonKey(name: 'price')
-  final int? price;
+  final double? price;
   @override
   @JsonKey(name: 'delivery')
   final String? delivery;
@@ -501,7 +501,7 @@ abstract class _CartItem implements CartItem {
     @JsonKey(name: 'title') final String? title,
     @JsonKey(name: 'image') final String? image,
     @JsonKey(name: 'description') final String? description,
-    @JsonKey(name: 'price') final int? price,
+    @JsonKey(name: 'price') final double? price,
     @JsonKey(name: 'delivery') final String? delivery,
     @JsonKey(name: 'quantity') final int? quantity,
     @JsonKey(name: 'shippingInformation') final String? shippingInformation,
@@ -526,7 +526,7 @@ abstract class _CartItem implements CartItem {
   String? get description;
   @override
   @JsonKey(name: 'price')
-  int? get price;
+  double? get price;
   @override
   @JsonKey(name: 'delivery')
   String? get delivery;

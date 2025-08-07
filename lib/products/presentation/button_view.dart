@@ -44,7 +44,7 @@ class _ButtonState extends State<ButtonView> {
               widget.onUpdateCart(_cartNotifier.value);
             },
           ),
-          Text('${item.quantity}'),
+          Text('${item.quantity}', style: const TextStyle(fontSize: 14, fontWeight: FontWeight.bold)),
           IconButton(
             icon: Icon(Icons.add),
             onPressed: () {

@@ -5,7 +5,7 @@ import 'package:ticl_ecommerce/cart/domain/cart_data.dart';
 import '../../products/domain/product_data.dart';
 import '../../products/providers/product_provider.dart';
 
-class CartNotifier extends StateNotifier<Map<int, Cart>> {
+class CartNotifier extends StateNotifier<Map<int, CartItem>> {
   final Ref _ref;
   AsyncValue<List<Products>>? productState;
   final ValueNotifier<int> countNotifier = ValueNotifier(0);
@@ -26,7 +26,7 @@ class CartNotifier extends StateNotifier<Map<int, Cart>> {
       data
           .where((product) {return state[product.id ?? 0]?.isAddedToCart ?? false;})
           .map((product) {
-            return Cart(
+            return CartItem(
               id: product.id,
               isAddedToCart: true,
               quantity: state[product.id ?? 0]?.quantity ?? 0,
@@ -42,11 +42,11 @@ class CartNotifier extends StateNotifier<Map<int, Cart>> {
     }, error: (e, _) => null, loading: () => null);
   }
 
-  void updateCart(int productId, Cart cart) {
+  void updateCart(int productId, CartItem cart) {
     state[productId] = cart;
   }
 
-  Cart getCartData(int productId) => state[productId] ?? Cart(
+  CartItem getCartData(int productId) => state[productId] ?? CartItem(
       isAddedToCart: false, quantity: 0);
 
   void updateCount() {
@@ -59,6 +59,6 @@ class CartNotifier extends StateNotifier<Map<int, Cart>> {
 }
 
 final cartNotifierProvider =
-    StateNotifierProvider<CartNotifier, Map<int, Cart>>((ref) {
+    StateNotifierProvider<CartNotifier, Map<int, CartItem>>((ref) {
       return CartNotifier({}, ref);
     });

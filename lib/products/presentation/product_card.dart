@@ -15,7 +15,7 @@ class ProductCard extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final cartNotifier = ref.watch(cartNotifierProvider.notifier);
-    Cart cart = cartNotifier.getCartData(product.id ?? 0);
+    CartItem cart = cartNotifier.getCartData(product.id ?? 0);
     return Card(
       margin: const EdgeInsets.all(6),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),

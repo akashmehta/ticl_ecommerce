@@ -6,15 +6,15 @@ part 'cart_data.g.dart';
 @freezed
 abstract class CartData with _$CartData {
   const factory CartData({
-    @JsonKey(name: 'cart_items') List<Cart>? cartItems,
+    @JsonKey(name: 'cart_items') List<CartItem>? cartItems,
   }) = _CartData;
 
   factory CartData.fromJson(Map<String, Object?> json) => _$CartDataFromJson(json);
 }
 
 @freezed
-abstract class Cart with _$Cart {
-  const factory Cart({
+abstract class CartItem with _$CartItem {
+  const factory CartItem({
     @JsonKey(name: 'id') int? id,
     @JsonKey(name: 'title') String? title,
     @JsonKey(name: 'image') String? image,
@@ -25,8 +25,8 @@ abstract class Cart with _$Cart {
     @JsonKey(name: 'shippingInformation') String? shippingInformation,
     @JsonKey(includeToJson: false, includeFromJson: false)
     @Default(false) bool isAddedToCart
-  }) = _Cart;
+  }) = _CartItem;
 
-  factory Cart.fromJson(Map<String, Object?> json) => _$CartFromJson(json);
+  factory CartItem.fromJson(Map<String, Object?> json) => _$CartItemFromJson(json);
 }
 

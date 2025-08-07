@@ -94,7 +94,7 @@ class CartScreen extends ConsumerWidget {
   }
 }
 
-Widget imageView(Cart? cartItem) => Container(
+Widget imageView(CartItem? cartItem) => Container(
   width: 120,
   height: 120,
   decoration: BoxDecoration(
@@ -109,7 +109,7 @@ Widget imageView(Cart? cartItem) => Container(
 );
 
 Widget cartDetailView(
-  Cart? cartItem,
+  CartItem? cartItem,
   VoidCallback onRemove,
   VoidCallback onAdd,
   VoidCallback onDelete,

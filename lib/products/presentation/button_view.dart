@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 import '../../cart/domain/cart_data.dart';
 
 class ButtonView extends StatefulWidget {
-  final Cart cart;
-  final Function(Cart) onUpdateCart;
+  final CartItem cart;
+  final Function(CartItem) onUpdateCart;
   const ButtonView({super.key, required this.cart, required this.onUpdateCart});
 
   @override
@@ -13,8 +13,8 @@ class ButtonView extends StatefulWidget {
 
 class _ButtonState extends State<ButtonView> {
 
-  late Cart _cart;
-  late ValueNotifier<Cart> _cartNotifier;
+  late CartItem _cart;
+  late ValueNotifier<CartItem> _cartNotifier;
 
   @override
   void initState() {

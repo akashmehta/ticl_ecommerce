@@ -1,15 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:awesome_rating/awesome_rating.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:ticl_ecommerce/products/domain/product_data.dart';
+import 'package:ticl_ecommerce/products/presentation/button_view.dart';
+import 'package:ticl_ecommerce/products/presentation/product_detail_view.dart';
 
-class ProductCard extends StatelessWidget {
+import '../../cart/domain/cart_data.dart';
+import '../../cart/providers/cart_provider.dart';
+
+class ProductCard extends ConsumerWidget {
   final Products product;
-
   const ProductCard({super.key, required this.product});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final cartNotifier = ref.watch(cartNotifierProvider.notifier);
+    CartItem cart = cartNotifier.getCartData(product.id ?? 0);
     return Card(
       margin: const EdgeInsets.all(6),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
@@ -22,8 +28,11 @@ class ProductCard extends StatelessWidget {
           children: [
             // Top row: Title, Description, and Image
             imageView(product),
-            productDetailView(product),
-            buttonView(product),
+            ProductDetailView(key: key,product: product),
+            ButtonView(key: key, cart: cart, onUpdateCart: (cart) {
+              cartNotifier.updateCart(product.id ?? 0, cart);
+              cartNotifier.updateCount();
+            }),
           ],
         ),
       ),
@@ -40,73 +49,6 @@ class ProductCard extends StatelessWidget {
           Image.asset('assets/placeholder_product.webp'),
       errorWidget: (context, error, stackTrace) => Icon(Icons.error),
       fit: BoxFit.cover,
-    ),
-  );
-
-  Widget productDetailView(Products product) => Column(
-    mainAxisAlignment: MainAxisAlignment.start,
-    crossAxisAlignment: CrossAxisAlignment.start,
-    children: [
-      Text(
-        product.title!,
-        style: const TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
-        maxLines: 1,
-        overflow: TextOverflow.ellipsis,
-      ),
-      const SizedBox(height: 6),
-      Text(
-        product.description ?? '',
-        style: const TextStyle(fontSize: 12, fontWeight: FontWeight.normal),
-        maxLines: 2,
-        overflow: TextOverflow.ellipsis,
-      ),
-      const SizedBox(height: 10),
-
-      Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Expanded(
-            flex: 5,
-            child: Text(
-              textAlign: TextAlign.start,
-              '\u{20B9}${product.price ?? 'NA'}',
-              style: const TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
-            ),
-          ),
-          Expanded(
-            flex: 5,
-            child: IgnorePointer(
-              child: AwesomeStarRating(
-                rating: product.rating ?? 0.0,
-                starCount: 5,
-                allowHalfRating: true,
-                size: 15,
-              ),
-            ),
-          ),
-        ],
-      ),
-      const SizedBox(height: 10),
-    ],
-  );
-
-  Widget buttonView(Products product) => ElevatedButton(
-    onPressed: () {},
-    style: ElevatedButton.styleFrom(
-      backgroundColor: Colors.green,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(6)),
-    ),
-    child: Text(
-      'Add To Cart',
-      style: const TextStyle(
-        color: Colors.white,
-        fontSize: 12,
-        fontWeight: FontWeight.bold,
-      ),
-      maxLines: 1,
-      overflow: TextOverflow.ellipsis,
     ),
   );
 }

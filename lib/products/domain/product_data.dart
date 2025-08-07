@@ -29,7 +29,7 @@ abstract class Products with _$Products {
     @JsonKey(name: 'weight') int? weight,
     @JsonKey(name: 'shippingInformation') String? shippingInformation,
     @JsonKey(name: 'images') List<String>? images,
-    @JsonKey(name: 'thumbnail') String? thumbnail,
+    @JsonKey(name: 'thumbnail') String? thumbnail
   }) = _Products;
 
   factory Products.fromJson(Map<String, Object?> json) => _$ProductsFromJson(json);

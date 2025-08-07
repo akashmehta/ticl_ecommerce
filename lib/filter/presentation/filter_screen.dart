@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:ticl_ecommerce/main.dart';
 import 'package:ticl_ecommerce/products/providers/product_provider.dart';
 import '../providers/filter_provider.dart';
 
 class FilterScreen extends ConsumerWidget {
   // Category list and notifier for selection
-  FilterScreen(Function(int page) onPageChange, {super.key});
+  final Function(int) _onPageChange;
+  FilterScreen(this._onPageChange, {super.key});
+
   final ValueNotifier<String> selectedFilter = ValueNotifier(filterCategories[0]);
   final ValueNotifier<Map<String, List<String?>>> filterTypes = ValueNotifier({});
 
@@ -35,7 +36,7 @@ class FilterScreen extends ConsumerWidget {
         padding: const EdgeInsets.all(16.0),
         child: ElevatedButton(
           onPressed: () {
-            onPageChange(0);
+            _onPageChange(0);
             productStateNotifier.filterProducts(filterTypes.value);
           },
           style: ElevatedButton.styleFrom(minimumSize: Size.fromHeight(48)),

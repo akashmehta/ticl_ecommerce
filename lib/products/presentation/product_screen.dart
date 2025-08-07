@@ -5,8 +5,7 @@ import '../providers/product_provider.dart';
 import '../presentation/product_card.dart';
 
 class ProductListScreen extends ConsumerWidget {
-
-  const ProductListScreen(Function(int page) onPageChange, {super.key});
+    const ProductListScreen({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -23,12 +22,11 @@ class ProductListScreen extends ConsumerWidget {
             border: InputBorder.none,
           ),
         ),
-          actions: [
-            notifier.isFilterEnabled ? IconButton(icon: Icon(Icons.filter_alt_off), onPressed: () {
-              notifier.resetFilter();
-            }) : Spacer(),
-            IconButton(icon: Icon(Icons.shopping_cart), onPressed: () {}),
-          ]),
+        actions: [
+          notifier.isFilterEnabled ? IconButton(icon: Icon(Icons.filter_alt_off), onPressed: () {
+            notifier.resetFilter();
+          }) : Spacer()
+        ]),
       body: productState.when(
         data: (data) => NotificationListener<ScrollNotification>(
           onNotification: (scrollInfo) {

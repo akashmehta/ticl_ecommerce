@@ -1,127 +1,99 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:ticl_ecommerce/util/utility.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class CartScreen extends StatefulWidget {
-  CartScreen(Function(int page) onPageChange);
+import '../domain/cart_data.dart';
+import '../providers/cart_provider.dart';
 
-  @override
-  State<CartScreen> createState() => _CartScreenState();
-}
-
-class _CartScreenState extends State<CartScreen> {
-  bool isAvailable = false;
-  bool isOnSale = false;
-  double price = 50;
-  Widget divider = Utility.commonDivider;
-  int quantity = 1;
-  final Map<String, dynamic> product = {
-    'images': 'https://picsum.photos/id/237/200/300',
-    'title': 'Sample Product',
-    'description': 'This is a sample product  description.',
-    'price': 100.0,
-    'rating': 4.5,
-  };
-
-  List<Map<String, dynamic>> cartItems = [
-    {
-      'image': 'https://picsum.photos/id/237/200/300',
-      'title': 'Product Name 1',
-      'description': 'Description for product 1',
-      'price': 100.0,
-      'delivery': '2025-06-05',
-      'quantity': 1,
-    },
-    {
-      'image': 'https://picsum.photos/id/238/200/300',
-      'title': 'Product Name 2',
-      'description': 'Description for product details 2',
-      'price': 150.0,
-      'delivery': '2025-06-06',
-      'quantity': 2,
-    },
-  ];
+class CartScreen extends ConsumerWidget {
+  const CartScreen(Function(int page) onPageChange, {super.key});
 
   @override
-  Widget build(BuildContext context) {
-    int totalItems = cartItems.fold(
-      0,
-      (sum, item) => sum + item['quantity'] as int,
-    );
-
-
+  Widget build(BuildContext context, WidgetRef ref) {
+    final cartState = ref.watch(cartNotifierProvider);
+    final cartNotifier = ref.watch(cartNotifierProvider.notifier);
+    cartNotifier.loadCartScreen();
     return Scaffold(
-      appBar: AppBar(title: const Text('My shopping cart')),
-      body: Column(
-        children: [
-          const Divider(height: 1),
-          Expanded(
-            child: ListView.separated(
-              padding: const EdgeInsets.all(16),
-              itemCount: cartItems.length,
-              separatorBuilder: (_, __) => const SizedBox(height: 16),
-              itemBuilder: (context, index) {
-                final product = cartItems[index];
-                return Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    // Product Image
-                    imageView(product),
-                    const SizedBox(width: 16),
-                    // Product Details
-                    productDetailView(
-                      product,
-                      quantity,
-                      () {
-                        setState(() {
-                          if (product['quantity'] > 1) {
-                            product['quantity']--;
-                          }
-                        });
-                      },
-                      () {
-                        setState(() {
-                          product['quantity']++;
-                        });
-                      },
-                      () {
-                        setState(() {
-                          cartItems.removeAt(index);
-                        });
-                      },
-                    ),
-                  ],
-                );
-              },
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: SizedBox(
-              width: double.infinity,
-              child: ElevatedButton(
-                onPressed: totalItems > 0 ? () {} : null,
-                style: ElevatedButton.styleFrom(
-                  padding: const EdgeInsets.symmetric(vertical: 16),
-                  backgroundColor: Colors.green,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(8),
-                  ),
-                ),
-                child: Text(
-                  'Proceed to buy ($totalItems items)',
-                  style: const TextStyle(fontSize: 16, color: Colors.white),
+      appBar: AppBar(title: const Text('My cart')),
+      body: ValueListenableBuilder(valueListenable: cartNotifier.countNotifier, builder: (context, item, _) {
+        return Column(
+            children: [
+              const Divider(height: 1),
+              Expanded(
+                child: ListView.separated(
+                  padding: const EdgeInsets.all(16),
+                  itemCount: cartState.length,
+                  separatorBuilder: (_, __) => const SizedBox(height: 16),
+                  itemBuilder: (context, index) {
+                    final cartItem = cartState[cartState.keys.elementAt(index)];
+                    return Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        // Product Image
+                        imageView(cartItem),
+                        const SizedBox(width: 16),
+                        // Product Details
+                        cartDetailView(cartItem, (cart) {
+                          cartNotifier.updateCart(cartItem?.id ?? 0, cart);
+                          cartNotifier.updateCount();
+                        }),
+                      ],
+                    );
+                  },
                 ),
               ),
-            ),
-          ),
-        ],
+              Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 0.0),
+                  child: SizedBox(
+                    width: double.infinity,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Expanded(
+                          flex: 5,
+                          child: Text('Total Cost',
+                              style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
+                        ),
+                        Expanded(
+                          flex: 5,
+                          child: Text(
+                              '${cartNotifier.totalCost()}',
+                              textAlign: TextAlign.end,
+                              style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16)
+                          ),
+                        ),
+                      ],
+                    ),
+                  )
+              ),
+              Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: SizedBox(
+                  width: double.infinity,
+                  child: ElevatedButton(
+                    onPressed: cartState.isNotEmpty ? () {} : null,
+                    style: ElevatedButton.styleFrom(
+                      padding: const EdgeInsets.symmetric(vertical: 16),
+                      backgroundColor: Colors.green,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                    ),
+                    child: Text(
+                      'Proceed to buy (${cartNotifier.countNotifier.value} items)',
+                      style: const TextStyle(fontSize: 16, color: Colors.white),
+                    ),
+                  ),
+                ),
+              ),
+            ]);
+      },
       ),
     );
+
   }
 }
 
-Widget imageView(Map<String, dynamic> product) => Container(
+Widget imageView(CartItem? cartItem) => Container(
   width: 120,
   height: 120,
   decoration: BoxDecoration(
@@ -129,57 +101,86 @@ Widget imageView(Map<String, dynamic> product) => Container(
     borderRadius: BorderRadius.circular(8),
   ),
   child: Image.network(
-                        product['image'],
+                        cartItem?.image ?? "",
                         fit: BoxFit.cover,
                         errorBuilder: (_, __, ___) => const Icon(Icons.image, size: 50),
                       ),
 );
 
-Widget productDetailView(
-  Map<String, dynamic> product,
-  int quantity,
-  VoidCallback onRemove,
-  VoidCallback onAdd,
-  VoidCallback onDelete,
-) => Expanded(
-  child: Column(
-    crossAxisAlignment: CrossAxisAlignment.start,
-    children: [
-      Text(
-        product['title'],
-        style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
-      ),
-      const SizedBox(height: 4),
-      Text(
-        product['description'],
-        style: const TextStyle(fontSize: 13, color: Colors.black54),
-      ),
-      const SizedBox(height: 8),
-      Text(
-        'Rs. ${product['price']}',
-        style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 15),
-      ),
-      const SizedBox(height: 4),
-      Text(
-        'Delivery: ${product['delivery']}',
-        style: const TextStyle(fontSize: 12, color: Colors.black54),
-      ),
-      const SizedBox(height: 8),
-      Row(
-        children: [
-          IconButton(icon: const Icon(Icons.remove), onPressed: onRemove),
-          Text(
-            '${product['quantity']}',
-            style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-          ),
-          IconButton(icon: const Icon(Icons.add), onPressed: onAdd),
-          const SizedBox(width: 8),
-          TextButton(
-            onPressed: onDelete,
-            child: const Text('Remove', style: TextStyle(color: Colors.red)),
-          ),
-        ],
-      ),
-    ],
-  ),
-);
+Widget cartDetailView(
+  CartItem? cartItem, Function(CartItem) onUpdateCart
+) {
+  ValueNotifier<CartItem> cartNotifier = ValueNotifier(cartItem ?? CartItem());
+  return Expanded(
+    child: Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          cartItem?.title??"",
+          maxLines: 1,
+          style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+        ),
+        const SizedBox(height: 4),
+        Text(
+          cartItem?.description ?? "",
+          maxLines: 2,
+          style: const TextStyle(fontSize: 13, color: Colors.black54),
+        ),
+        const SizedBox(height: 8),
+        Text(
+          'Rs. ${cartItem?.price}',
+          style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 15),
+        ),
+        const SizedBox(height: 4),
+        Text(
+          'Delivery: ${cartItem?.shippingInformation}',
+          style: const TextStyle(fontSize: 12, color: Colors.black54),
+        ),
+        const SizedBox(height: 8),
+        ValueListenableBuilder(valueListenable: cartNotifier, builder: (context, item, _) {
+          return Row(
+            children: [
+              IconButton(icon: const Icon(Icons.remove), onPressed: () {
+                if ((item.quantity ?? 0) > 1) {
+                  cartNotifier.value = item.copyWith(
+                    isAddedToCart: true,
+                    quantity: (item.quantity ?? 0) - 1,
+                  );
+                } else {
+                  cartNotifier.value = item.copyWith(
+                    isAddedToCart: false,
+                    quantity: 0,
+                  );
+                }
+                onUpdateCart(cartNotifier.value);
+
+              }),
+              Text(
+                '${item.quantity}',
+                style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+              ),
+              IconButton(icon: const Icon(Icons.add), onPressed: () {
+                cartNotifier.value = item.copyWith(
+                  isAddedToCart: true,
+                  quantity: (item.quantity ?? 0) + 1,
+                );
+                onUpdateCart(cartNotifier.value);
+              }),
+              const SizedBox(width: 8),
+              TextButton(
+                onPressed: () {
+                  cartNotifier.value = item.copyWith(
+                    isAddedToCart: false,
+                    quantity: 0,
+                  );
+                  onUpdateCart(cartNotifier.value);
+                },
+                child: const Text('Remove', style: TextStyle(color: Colors.red)),
+              ),
+            ],
+          );
+        }),
+      ],
+    ),
+  );
+}

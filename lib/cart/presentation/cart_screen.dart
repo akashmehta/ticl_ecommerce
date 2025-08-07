@@ -31,7 +31,13 @@ class CartScreen extends ConsumerWidget {
                     imageView(cartItem),
                     const SizedBox(width: 16),
                     // Product Details
-                    cartDetailView(cartItem, () {}, () {}, () {},),
+                    cartDetailView(cartItem, () {
+
+                    }, () {
+
+                    }, () {
+
+                    },),
                   ],
                 );
               },

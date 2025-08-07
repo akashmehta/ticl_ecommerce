@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:ticl_ecommerce/products/domain/product_data.dart';
 
 class ProductDetailView extends StatelessWidget {
-
   final Products product;
+
   const ProductDetailView({super.key, required this.product});
 
   @override
@@ -36,7 +36,10 @@ class ProductDetailView extends StatelessWidget {
               child: Text(
                 textAlign: TextAlign.start,
                 '\u{20B9}${product.price ?? 'NA'}',
-                style: const TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
+                style: const TextStyle(
+                  fontSize: 12,
+                  fontWeight: FontWeight.bold,
+                ),
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
               ),
@@ -58,5 +61,4 @@ class ProductDetailView extends StatelessWidget {
       ],
     );
   }
-
 }

@@ -22,9 +22,12 @@ final filterRepositoryProvider = Provider<FilterRepository>((ref) {
 
 class FilterListNotifier
     extends StateNotifier<AsyncValue<Map<String, List<String?>>>> {
+
+  final FilterRepository _repository;
+  final Ref _ref;
+
   FilterListNotifier(this._repository, this._ref) :
         super(const AsyncValue.loading()) {
-    fetchFilterTypes(List.empty(), List.empty());
     final productState = _ref.watch(productListNotifierProvider);
     productState.when(
       data: (data) => fetchFilterTypes(data, _filterCategories),
@@ -32,9 +35,6 @@ class FilterListNotifier
       loading: () => null,
     );
   }
-
-  final FilterRepository _repository;
-  final Ref _ref;
 
   void fetchFilterTypes(List<Products> products, List<String> filterItems) {
     try {

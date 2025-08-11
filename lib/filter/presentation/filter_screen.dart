@@ -9,11 +9,11 @@ class FilterScreen extends ConsumerWidget {
   FilterScreen(this._onPageChange, {super.key});
 
   final ValueNotifier<String> selectedFilter = ValueNotifier(filterCategories[0]);
-  final ValueNotifier<Map<String, List<String?>>> filterTypes = ValueNotifier({});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final filterState = ref.watch(filterListNotifierProvider);
+    final filterNotifier = ref.watch(filterListNotifierProvider.notifier);
     final productStateNotifier = ref.watch(productListNotifierProvider.notifier);
     return Scaffold(
       appBar: AppBar(title: Text('Filters'),),
@@ -24,7 +24,7 @@ class FilterScreen extends ConsumerWidget {
             filterTypeList(),
 
             // Options for selected category
-            filterSubTypeList(data),
+            filterSubTypeList(filterNotifier, data),
           ],
         ),
         error: (e, _) => Center(child: Text('Error : $e')),
@@ -37,7 +37,7 @@ class FilterScreen extends ConsumerWidget {
         child: ElevatedButton(
           onPressed: () {
             _onPageChange(0);
-            productStateNotifier.filterProducts(filterTypes.value);
+            productStateNotifier.filterProducts(filterNotifier.filterTypes.value);
           },
           style: ElevatedButton.styleFrom(minimumSize: Size.fromHeight(48)),
           child: Text('Apply Filters'),
@@ -69,7 +69,7 @@ class FilterScreen extends ConsumerWidget {
     ),
   );
 
-  Expanded filterSubTypeList(Map<String, List<String?>> data) => Expanded(
+  Expanded filterSubTypeList(FilterListNotifier filterNotifier, Map<String, List<String?>> data) => Expanded(
     child: Padding(
       padding: const EdgeInsets.all(12),
       child: ValueListenableBuilder<String>(
@@ -84,16 +84,16 @@ class FilterScreen extends ConsumerWidget {
           data[value]?.forEach((item) {
             categoryFilters[item ?? ''] = false;
           });
-          return categoryFilterValues(value, categoryFilters);
+          return categoryFilterValues(filterNotifier, value, categoryFilters);
         },
       ),
     ),
   );
 
-  ValueListenableBuilder<Map<String, bool>> categoryFilterValues(String category,
+  ValueListenableBuilder<Map<String, bool>> categoryFilterValues(FilterListNotifier filterNotifier, String category,
       Map<String, bool> subCategories,) {
     ValueNotifier<Map<String, bool>> localFilter = ValueNotifier(subCategories);
-    localFilter.value.addAll({ for (var item in filterTypes.value[category] ?? []) item : true });
+    localFilter.value.addAll({ for (var item in filterNotifier.filterTypes.value[category] ?? []) item : true });
     return ValueListenableBuilder<Map<String, bool>>(
       valueListenable: localFilter,
       builder: (_, filters, __) {
@@ -104,13 +104,13 @@ class FilterScreen extends ConsumerWidget {
               value: entry.value,
               onChanged: (newValue) {
                 localFilter.value = {...filters, entry.key: newValue ?? false,};
-                List<String?> subCat = filterTypes.value[category] ?? [];
+                List<String?> subCat = filterNotifier.filterTypes.value[category] ?? [];
                 if (newValue == true) {
                   subCat.add(entry.key);
                 } else {
                   subCat.remove(entry.key);
                 }
-                filterTypes.value = {...filterTypes.value, category : subCat};
+                filterNotifier.filterTypes.value = {...filterNotifier.filterTypes.value, category : subCat};
               },
             );
           }).toList(),

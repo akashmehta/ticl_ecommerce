@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:ticl_ecommerce/filter/data/filter_repository.dart';
 import 'package:ticl_ecommerce/products/domain/product_data.dart';
@@ -25,15 +26,12 @@ class FilterListNotifier
 
   final FilterRepository _repository;
   final Ref _ref;
+  final ValueNotifier<Map<String, List<String?>>> filterTypes = ValueNotifier({});
 
   FilterListNotifier(this._repository, this._ref) :
         super(const AsyncValue.loading()) {
-    final productState = _ref.watch(productListNotifierProvider);
-    productState.when(
-      data: (data) => fetchFilterTypes(data, _filterCategories),
-      error: (e, _) => null,
-      loading: () => null,
-    );
+    final productState = _ref.watch(productListNotifierProvider.notifier);
+    fetchFilterTypes(productState.products, _filterCategories);
   }
 
   void fetchFilterTypes(List<Products> products, List<String> filterItems) {
@@ -43,6 +41,10 @@ class FilterListNotifier
     } catch (e, st) {
       state = AsyncValue.error(e, st);
     }
+  }
+
+  void resetFilter() {
+    filterTypes.value.clear();
   }
 }
 

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:ticl_ecommerce/filter/providers/filter_provider.dart';
 import 'package:ticl_ecommerce/products/presentation/sort_fab_view.dart';
 import '../providers/product_provider.dart';
 import '../presentation/product_card.dart';
@@ -30,11 +31,12 @@ class ProductListScreen extends ConsumerWidget {
           ),
         ),
         actions: [
-          notifier.isFilterEnabled
+          notifier.isFilterEnabled.value
               ? IconButton(
             icon: Icon(Icons.filter_alt_off),
             onPressed: () {
               notifier.resetFilter();
+              ref.watch(filterListNotifierProvider.notifier).resetFilter();
             },
           )
               : SizedBox.shrink(),
@@ -47,7 +49,7 @@ class ProductListScreen extends ConsumerWidget {
                     scrollInfo.metrics.maxScrollExtent &&
                 notifier.hasMore &&
                 !notifier.isLoading &&
-                !notifier.isFilterEnabled) {
+                !(notifier.isFilterEnabled.value)) {
               notifier.fetchNextPage();
             }
             return false;

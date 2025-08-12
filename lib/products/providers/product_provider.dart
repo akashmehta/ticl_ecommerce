@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:ticl_ecommerce/products/domain/product_data.dart';
 import '../../core/providers/service_providers.dart';
-import '../../core/services/filter_service.dart';
 import '../data/product_repository.dart';
 
 final productRepositoryProvider = Provider<ProductRepository>((ref) {
@@ -30,8 +29,7 @@ class ProductListNotifier
     RangeValues(1001, 2000),
     RangeValues(2001, double.infinity),
   ];
-
-  Map<String, List<String?>> _filteredItems = {};
+  List<Products> filteredList = [];
 
   Future<void> fetchNextPage() async {
     if (!_hasMore || _isLoading) return;
@@ -55,12 +53,13 @@ class ProductListNotifier
 
   bool get isLoading => _isLoading;
 
-  bool get isFilterEnabled => _filteredItems.isNotEmpty;
+  ValueNotifier<bool> isFilterEnabled = ValueNotifier(false);
 
   List<Products> get products => _productData;
 
   void resetFilter() {
-    _filteredItems.clear();
+    filteredList.clear();
+    isFilterEnabled.value = false;
     state = AsyncValue.data(_productData);
   }
 
@@ -92,9 +91,7 @@ class ProductListNotifier
   }
 
   void filterProducts(Map<String, List<String?>> filterItems) {
-    List<Products> filteredList = [];
-    _filteredItems = filterItems;
-
+    isFilterEnabled.value = filterItems.isNotEmpty;
     filteredList = _productData.where((product) {
       bool matchesCategory = true;
       bool matchesBrand = true;
@@ -111,7 +108,10 @@ class ProductListNotifier
 
       if (filterItems.containsKey('Price')) {
         matchesPrice = filterItems['Price']?.any((rangeStr) {
-          final range = priceRanges.firstWhere((range) => priceRange.contains(rangeStr));
+          final range = priceRanges.firstWhere((range) {
+            return  (range == priceRanges[3] && rangeStr == '>2000') ||
+            ('${range.start.toInt()}–${range.end.toInt()}' == rangeStr);
+          });
           return (product.price ?? 0) >= range.start && (product.price ?? 0) <= range.end;
         }) ?? false;
       }

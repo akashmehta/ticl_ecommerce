@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:ticl_ecommerce/cart/domain/cart_data.dart';
 
@@ -6,12 +6,8 @@ import '../../products/domain/product_data.dart';
 import '../../products/providers/product_provider.dart';
 
 class CartNotifier extends StateNotifier<Map<int, CartItem>> {
-  final Ref _ref;
-  AsyncValue<List<Products>>? productState;
   final ValueNotifier<int> countNotifier = ValueNotifier(0);
-  CartNotifier(super.state, this._ref) {
-    productState = _ref.watch(productListNotifierProvider);
-  }
+  CartNotifier(super.state);
 
   double totalCost() {
     double total = 0.0;
@@ -21,25 +17,23 @@ class CartNotifier extends StateNotifier<Map<int, CartItem>> {
     return total;
   }
 
-  void loadCartScreen() {
-    productState?.when(data: (data) {
-      data
-          .where((product) {return state[product.id ?? 0]?.isAddedToCart ?? false;})
-          .map((product) {
-            return CartItem(
-              id: product.id,
-              isAddedToCart: true,
-              quantity: state[product.id ?? 0]?.quantity ?? 0,
-              title: product.title,
-              price: (product.price ?? 0.0),
-              description: product.description,
-              image: product.images![0],
-              shippingInformation: product.shippingInformation
-            );
-          }).forEach((cart) {
-            state[(cart.id ?? 0)] = cart;
-          });
-    }, error: (e, _) => null, loading: () => null);
+  void loadCartScreen(List<Products> data) {
+    data
+        .where((product) {return state[product.id ?? 0]?.isAddedToCart ?? false;})
+        .map((product) {
+      return CartItem(
+          id: product.id,
+          isAddedToCart: true,
+          quantity: state[product.id ?? 0]?.quantity ?? 0,
+          title: product.title,
+          price: (product.price ?? 0.0),
+          description: product.description,
+          image: product.images![0],
+          shippingInformation: product.shippingInformation
+      );
+    }).forEach((cart) {
+      state[(cart.id ?? 0)] = cart;
+    });
   }
 
   void removeItem(int productId) {
@@ -50,7 +44,14 @@ class CartNotifier extends StateNotifier<Map<int, CartItem>> {
     if (cart.quantity == 0) {
       state.remove(productId);
     } else {
-      state[productId] = cart;
+      if (!state.containsKey(productId)) {
+        state.putIfAbsent(productId, () { return cart; });
+      } else {
+        state[productId] = cart;
+      }
+    }
+    if (kDebugMode) {
+      print('cart: notifier state: $state');
     }
   }
 
@@ -76,5 +77,5 @@ class CartNotifier extends StateNotifier<Map<int, CartItem>> {
 
 final cartNotifierProvider =
     StateNotifierProvider<CartNotifier, Map<int, CartItem>>((ref) {
-      return CartNotifier({}, ref);
+      return CartNotifier({});
     });

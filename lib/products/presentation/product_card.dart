@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -8,13 +9,15 @@ import 'package:ticl_ecommerce/products/presentation/product_detail_view.dart';
 import '../../cart/domain/cart_data.dart';
 import '../../cart/providers/cart_provider.dart';
 
+import 'dart:convert';
+
 class ProductCard extends ConsumerWidget {
   final Products product;
-  const ProductCard({super.key, required this.product});
+  final CartNotifier cartNotifier;
+  const ProductCard({super.key, required this.cartNotifier, required this.product});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final cartNotifier = ref.watch(cartNotifierProvider.notifier);
     CartItem cart = cartNotifier.getCartData(product.id ?? 0);
     return Card(
       margin: const EdgeInsets.all(6),
@@ -32,6 +35,9 @@ class ProductCard extends ConsumerWidget {
             ButtonView(key: key, cart: cart, onUpdateCart: (cart) {
               cartNotifier.updateCart(product.id ?? 0, cart);
               cartNotifier.updateCount();
+              if (kDebugMode) {
+                print('cart: ${jsonEncode(cart)}');
+              }
             }),
           ],
         ),

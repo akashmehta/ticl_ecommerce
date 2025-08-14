@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:ticl_ecommerce/filter/providers/filter_provider.dart';
 import 'package:ticl_ecommerce/products/presentation/sort_fab_view.dart';
+import '../../cart/providers/cart_provider.dart';
 import '../providers/product_provider.dart';
 import '../presentation/product_card.dart';
 
@@ -10,8 +11,9 @@ class ProductListScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final notifier = ref.watch(productListNotifierProvider.notifier);
+    final productNotifier = ref.watch(productListNotifierProvider.notifier);
     final productState = ref.watch(productListNotifierProvider);
+    final cartNotifier = ref.watch(cartNotifierProvider.notifier);
 
     return Scaffold(
       appBar: AppBar(
@@ -20,7 +22,7 @@ class ProductListScreen extends ConsumerWidget {
           preferredSize: Size.fromHeight(56.0),
           child: TextField(
             onChanged: (value) {
-              notifier.searchProducts(value);
+              productNotifier.searchProducts(value);
             },
             decoration: InputDecoration(
                 hintText: 'Search...',
@@ -31,11 +33,11 @@ class ProductListScreen extends ConsumerWidget {
           ),
         ),
         actions: [
-          notifier.isFilterEnabled.value
+          productNotifier.isFilterEnabled.value
               ? IconButton(
             icon: Icon(Icons.filter_alt_off),
             onPressed: () {
-              notifier.resetFilter();
+              productNotifier.resetFilter();
               ref.watch(filterListNotifierProvider.notifier).resetFilter();
             },
           )
@@ -47,10 +49,10 @@ class ProductListScreen extends ConsumerWidget {
           onNotification: (scrollInfo) {
             if (scrollInfo.metrics.pixels ==
                     scrollInfo.metrics.maxScrollExtent &&
-                notifier.hasMore &&
-                !notifier.isLoading &&
-                !(notifier.isFilterEnabled.value)) {
-              notifier.fetchNextPage();
+                productNotifier.hasMore &&
+                !productNotifier.isLoading &&
+                !(productNotifier.isFilterEnabled.value)) {
+              productNotifier.fetchNextPage();
             }
             return false;
           },
@@ -64,7 +66,7 @@ class ProductListScreen extends ConsumerWidget {
             // Vertical spacing between items
             padding: EdgeInsets.all(6),
             children: List.generate(data.length, (index) {
-              return ProductCard(product: data[index]);
+              return ProductCard(cartNotifier: cartNotifier, product: data[index]);
             }),
           ),
         ),
@@ -73,7 +75,7 @@ class ProductListScreen extends ConsumerWidget {
       ),
       floatingActionButton: SortFabView(
         onSortSelected: (order) {
-          notifier.sortProducts(order);
+          productNotifier.sortProducts(order);
         },
       ),
     );

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:ticl_ecommerce/products/providers/product_provider.dart';
 
 import '../domain/cart_data.dart';
 import '../providers/cart_provider.dart';
@@ -11,7 +12,8 @@ class CartScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final cartState = ref.watch(cartNotifierProvider);
     final cartNotifier = ref.watch(cartNotifierProvider.notifier);
-    cartNotifier.loadCartScreen();
+    final productNotifier = ref.watch(productListNotifierProvider.notifier);
+    cartNotifier.loadCartScreen(productNotifier.products);
     return Scaffold(
       appBar: AppBar(title: const Text('My cart')),
       body: ValueListenableBuilder(valueListenable: cartNotifier.countNotifier, builder: (context, item, _) {
